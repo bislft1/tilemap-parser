@@ -16,7 +16,7 @@ What this demonstrates:
   - Inline collision data → parse_tileset_collision()
   - Tile rendering   → TileLayerRenderer with programmatic spritesheet
   - Tile collision   → CollisionRunner.move_and_slide()
-  - Irregular polygon tile shapes (7-vertex rock)
+  - Large irregular polygon obstacle (11-vertex organic shape)
   - Object collision → ObjectCollisionManager with mixed shapes/layers
   - Animation        → AnimationLibrary + SpriteAnimationSet + AnimationPlayer
   - Shape drawing    → pygame.draw for debug visualisation (circle, capsule, rect, polygon)
@@ -38,7 +38,9 @@ from tilemap_parser import (
     AnimationPlayer,
     CapsuleShape,
     CircleShape,
+    check_collision,
     CollisionHit,
+    CollisionPolygon,
     CollisionResult,
     CollisionRunner,
     get_shape_aabb,
@@ -68,7 +70,7 @@ def _tile(variant: int) -> dict:
 
 
 def build_map_dict() -> dict:
-    """20×15 tile map with border walls, interior pillars, and polygon tiles."""
+    """20×15 tile map with border walls and interior pillars."""
     tiles: dict[str, dict] = {}
     for x in range(MAP_W):
         for y in range(MAP_H):
@@ -76,15 +78,7 @@ def build_map_dict() -> dict:
             is_border = x == 0 or x == MAP_W - 1 or y == 0 or y == MAP_H - 1
             pillar_a = x == 5 and 3 <= y <= 5
             pillar_b = x == 14 and 9 <= y <= 11
-            # Polygon-shaped tiles (irregular rock / ramp)
-            is_poly_rock = (x, y) in ((7, 7), (11, 4), (10, 11))
-            is_poly_ramp = (x, y) in ((9, 4), (7, 11))
-            if is_border or pillar_a or pillar_b:
-                variant = 1
-            elif is_poly_rock or is_poly_ramp:
-                variant = 2
-            else:
-                variant = 0
+            variant = 1 if is_border or pillar_a or pillar_b else 0
             t = _tile(variant)
             t["pos"] = f"{x};{y}"
             tiles[key] = t
@@ -123,16 +117,6 @@ TILESET_COLLISION_DATA: dict = {
                         [float(TILE_W), 0.0],
                         [float(TILE_W), float(TILE_H)],
                         [0.0, float(TILE_H)],
-                    ]
-                }
-            ]
-        },
-        "2": {
-            "shapes": [
-                {
-                    "vertices": [
-                        [5.0, 0.0], [27.0, 2.0], [32.0, 12.0],
-                        [28.0, 28.0], [18.0, 32.0], [8.0, 30.0], [0.0, 22.0],
                     ]
                 }
             ]
@@ -186,17 +170,34 @@ class Npc:
 
 
 # ---------------------------------------------------------------------------
+# Big static polygon — spans ~128x128 world units with spikes + smooth curves
+# ---------------------------------------------------------------------------
+class BigPolygon:
+    """Large irregular polygon that demonstrates polygon-vs-circle collision
+    and sliding against an organic shape with both smooth and spiky edges."""
+
+    def __init__(self) -> None:
+        self.x = 0.0
+        self.y = 0.0
+        # World-space vertices (not tile-local) — placed in open area
+        self.collision_shape = CollisionPolygon(vertices=[
+            (360, 190), (420, 180), (470, 200), (490, 240),
+            (480, 280), (440, 310), (380, 320), (340, 300),
+            (320, 270), (310, 240), (320, 210),
+        ])
+        self.color = (160, 120, 200)
+
+
+# ---------------------------------------------------------------------------
 # Programmatic spritesheets (no external files needed)
 # ---------------------------------------------------------------------------
 def make_tile_sheet() -> pygame.Surface:
-    """3-column sheet: col 0 = floor, col 1 = wall, col 2 = polygon rock."""
-    surf = pygame.Surface((TILE_W * 3, TILE_H))
+    """2-column sheet: col 0 = floor, col 1 = wall."""
+    surf = pygame.Surface((TILE_W * 2, TILE_H))
     surf.fill((50, 55, 60), rect=(0, 0, TILE_W, TILE_H))
     pygame.draw.rect(surf, (58, 63, 68), (0, 0, TILE_W, TILE_H), 1)
     surf.fill((80, 60, 40), rect=(TILE_W, 0, TILE_W, TILE_H))
     pygame.draw.rect(surf, (100, 75, 50), (TILE_W, 0, TILE_W, TILE_H), 1)
-    surf.fill((65, 60, 50), rect=(TILE_W * 2, 0, TILE_W, TILE_H))
-    pygame.draw.rect(surf, (85, 75, 60), (TILE_W * 2, 0, TILE_W, TILE_H), 1)
     return surf
 
 
@@ -298,6 +299,10 @@ def main() -> None:
     for n in npcs:
         mgr.add_object(n)
 
+    big_poly = BigPolygon()
+    # big_poly is NOT added to manager — handled manually in the game loop
+    # for proper velocity-projection sliding (resolve() alone causes ghostly jitter).
+
     # 4. Animation setup ------------------------------------------------------
     anim_lib = AnimationLibrary(
         spritesheet_path=None,
@@ -366,7 +371,19 @@ def main() -> None:
         for n in npcs:
             n.update(dt)
 
-        # Object-vs-object
+        # Polygon collision — velocity-projection slide
+        old_ppos = (player.x, player.y)
+        poly_hit = check_collision(player, big_poly)
+        if poly_hit is not None:
+            player.x, player.y = old_ppos
+            slide_x, slide_y = poly_hit.slide_velocity(dx, dy)
+            result = runner.move_and_slide(player, ts_collision, tile_map, slide_x, slide_y, slope_slide=True)
+            final_hit = check_collision(player, big_poly)
+            if final_hit is not None:
+                player.x -= final_hit.normal[0] * final_hit.depth
+                player.y -= final_hit.normal[1] * final_hit.depth
+
+        # Object-vs-object (NPCs + player, no big_poly)
         hits = mgr.check_all_collisions()
         for h in hits:
             h.resolve()
@@ -386,19 +403,22 @@ def main() -> None:
         for tx, ty in collision_tiles:
             rect = (tx * TILE_W - cam_x, ty * TILE_H - cam_y, TILE_W, TILE_H)
             pygame.draw.rect(screen, (255, 60, 60), rect, 2)
-            # Draw polygon shapes inside the tile
-            tid = tile_map.get((tx, ty))
-            if tid is not None:
-                world_shapes = ts_collision.get_world_shapes(tid, tx * TILE_W, ty * TILE_H)
-                for poly in world_shapes:
-                    pts = [(int(v[0] - cam_x), int(v[1] - cam_y)) for v in poly.vertices]
-                    if len(pts) >= 3:
-                        pygame.draw.polygon(screen, (255, 200, 60), pts, 1)
 
         for n in npcs:
             draw_shape(screen, n, cam_x, cam_y)
 
         draw_shape(screen, player, cam_x, cam_y)
+
+        # Draw the big polygon outline (world-space vertices)
+        verts = [(int(v[0] - cam_x), int(v[1] - cam_y)) for v in big_poly.collision_shape.vertices]
+        if len(verts) >= 3:
+            pygame.draw.polygon(screen, (180, 140, 220), verts, 2)
+            # Fill with subtle color when player touches it
+            for h in hits:
+                if h.involves(big_poly):
+                    filled = [(int(v[0] - cam_x), int(v[1] - cam_y)) for v in big_poly.collision_shape.vertices]
+                    pygame.draw.polygon(screen, (180, 140, 220, 40), filled, 0)
+                    break
 
         frame = anim_player.get_current_image()
         if frame is not None:
@@ -415,7 +435,7 @@ def main() -> None:
             f"Player: ({player.x:.0f}, {player.y:.0f})",
             f"Tile collision: {'yes' if result.collided else 'no'}",
             f"Object hits: {len(hits)}",
-            f"Polygon tiles nearby: {sum(1 for t in collision_tiles if tile_map.get(t) == 2)}",
+            f"Polygon overlap: {'yes' if any(h.involves(big_poly) for h in hits) else 'no'}",
         ]
         for i, line in enumerate(lines):
             screen.blit(font.render(line, True, (200, 200, 200)), (10, 10 + i * 20))

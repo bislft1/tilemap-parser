@@ -338,6 +338,73 @@ class TestCollisionHitHelpers:
         with pytest.raises(ValueError, match="not part"):
             hit.other(c)
 
+    # ------------------------------------------------------------------
+    # slide_velocity
+    # ------------------------------------------------------------------
+    def test_slide_head_on(self):
+        """Directly into surface → zero tangential motion."""
+        hit = CollisionHit(
+            object_a=None, object_b=None,
+            normal=(1.0, 0.0), depth=5.0,
+        )
+        sx, sy = hit.slide_velocity(10.0, 0.0)
+        assert sx == 0.0
+        assert sy == 0.0
+
+    def test_slide_angled(self):
+        """Diagonal into surface → only perpendicular component removed."""
+        hit = CollisionHit(
+            object_a=None, object_b=None,
+            normal=(1.0, 0.0), depth=5.0,
+        )
+        sx, sy = hit.slide_velocity(10.0, 5.0)
+        assert sx == 0.0  # x component fully removed
+        assert sy == 5.0  # y component preserved (tangential)
+
+    def test_slide_parallel(self):
+        """Velocity along the surface → unchanged."""
+        hit = CollisionHit(
+            object_a=None, object_b=None,
+            normal=(0.0, 1.0), depth=5.0,
+        )
+        sx, sy = hit.slide_velocity(10.0, 0.0)
+        assert sx == 10.0
+        assert sy == 0.0
+
+    def test_slide_away(self):
+        """Velocity pointing away from surface → unchanged."""
+        hit = CollisionHit(
+            object_a=None, object_b=None,
+            normal=(1.0, 0.0), depth=5.0,
+        )
+        sx, sy = hit.slide_velocity(-10.0, 0.0)
+        assert sx == -10.0
+        assert sy == 0.0
+
+    def test_slide_zero(self):
+        """Zero velocity → zero."""
+        hit = CollisionHit(
+            object_a=None, object_b=None,
+            normal=(1.0, 0.0), depth=5.0,
+        )
+        sx, sy = hit.slide_velocity(0.0, 0.0)
+        assert sx == 0.0
+        assert sy == 0.0
+
+    def test_slide_diagonal_normal(self):
+        """Normal at 45°, velocity into surface → slide along surface."""
+        import math
+        n = (1.0 / math.sqrt(2), 1.0 / math.sqrt(2))
+        hit = CollisionHit(
+            object_a=None, object_b=None,
+            normal=n, depth=5.0,
+        )
+        sx, sy = hit.slide_velocity(1.0, 0.0)
+        # Dot = 1/sqrt(2) ≈ 0.707
+        # slide = (1, 0) - (0.707, 0.707) * 0.707 = (1 - 0.5, -0.5)
+        assert sx == pytest.approx(0.5)
+        assert sy == pytest.approx(-0.5)
+
 
 # ---------------------------------------------------------------------------
 # Capsule collision

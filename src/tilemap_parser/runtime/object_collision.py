@@ -2,7 +2,7 @@
 Object-to-object collision detection runtime.
 
 Provides a protocol-based interface, shape dispatch, layer filtering,
-a multi-object manager, and collision hit helpers for separation/resolve.
+a multi-object manager, and collision hit helpers for separation/resolve/slide.
 """
 
 from __future__ import annotations
@@ -71,6 +71,30 @@ class CollisionHit:
         self.object_a.y -= sep_y
         self.object_b.x += sep_x
         self.object_b.y += sep_y
+
+    def slide_velocity(self, vx: float, vy: float) -> tuple[float, float]:
+        """Project velocity along the collision surface (slide response).
+
+        Removes the component of (vx, vy) that is along *self.normal*,
+        leaving only the tangential component.  Intended for the moving
+        object passed as *object_a* — when that object moves into
+        *object_b* the approach component is stripped so the object slides
+        along the surface instead of penetrating.
+
+        If the velocity is already parallel to the surface or points away
+        from *object_b* the original velocity is returned unchanged.
+
+        Args:
+            vx: X component of velocity (object_a's velocity)
+            vy: Y component of velocity
+
+        Returns:
+            (slide_x, slide_y) — velocity projected onto the surface
+        """
+        dot = vx * self.normal[0] + vy * self.normal[1]
+        if dot > 0:
+            return (vx - self.normal[0] * dot, vy - self.normal[1] * dot)
+        return (vx, vy)
 
     def involves(self, obj: ICollidableObject) -> bool:
         """Check if this hit involves the given object."""
