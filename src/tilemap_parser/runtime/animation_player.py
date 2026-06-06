@@ -68,6 +68,24 @@ class SpriteAnimationSet:
             grid_offset_y=library.grid_offset[1],
         )
 
+    def get_content_bounds(self, clip_name: str) -> Optional[Rect]:
+        clip = self.library.get(clip_name)
+        if clip is None or not clip.frames:
+            return None
+        union: Optional[Rect] = None
+        for frame in clip.frames:
+            surf = self.get_image(frame.variant_id, copy_surface=False)
+            if surf is None:
+                continue
+            rect = surf.get_bounding_rect()
+            if rect.width == 0 or rect.height == 0:
+                continue
+            if union is None:
+                union = rect.copy()
+            else:
+                union.union_ip(rect)
+        return union
+
     def get_image(self, variant_id: int, *, copy_surface: bool = True) -> Optional[Surface]:
         tw, th = self.library.tile_size
         if tw <= 0 or th <= 0:
