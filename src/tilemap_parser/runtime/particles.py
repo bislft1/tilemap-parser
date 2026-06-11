@@ -18,6 +18,15 @@ from ..parser.particle import ParticleSystemConfig
 PARTICLE_TEXTURE_SIZE = 24
 MAX_DT = 0.05
 
+_SYMMETRIC_SHAPES = frozenset({"circle", "square", "diamond", "star", "sparkle", "smoke"})
+
+_ALPHA_FADE_MAP = {
+    "none": 0,
+    "fade_out": 1,
+    "fade_in": 2,
+    "fade_both": 3,
+}
+
 
 class ParticleEmitterNode:
     def __init__(self, parsed: ParsedNode) -> None:
@@ -165,18 +174,18 @@ def _interp_color(
     sc: Tuple[int, int, int, int],
     ec: Tuple[int, int, int, int],
     t: float,
-    alpha_fade: str,
+    alpha_fade: int,
 ) -> Tuple[int, int, int, int]:
     r = int(sc[0] + (ec[0] - sc[0]) * t)
     g = int(sc[1] + (ec[1] - sc[1]) * t)
     b = int(sc[2] + (ec[2] - sc[2]) * t)
     a_start = sc[3]
     a_end = ec[3]
-    if alpha_fade == "none":
+    if alpha_fade == 0:
         a = a_start
-    elif alpha_fade == "fade_out":
+    elif alpha_fade == 1:
         a = int(a_start + (a_end - a_start) * t)
-    elif alpha_fade == "fade_in":
+    elif alpha_fade == 2:
         a = int(a_end + (a_start - a_end) * t)
     else:
         mid = 0.5
@@ -255,7 +264,7 @@ class Particle:
         start_scale: float,
         end_scale: float,
         rotation_speed: float,
-        alpha_fade: str,
+        alpha_fade: int,
         shape: str,
     ):
         self.x = x
@@ -360,6 +369,8 @@ class ParticleEmitter:
         for i in range(alive, len(self.particles)):
             self._pool.append(self.particles[i])
         del self.particles[alive:]
+        if len(self._pool) > cfg.max_particles:
+            del self._pool[:len(self._pool) - cfg.max_particles]
 
     def _spawn(
         self, area_x: float, area_y: float, area_w: float, area_h: float
@@ -405,6 +416,7 @@ class ParticleEmitter:
             cfg.start_color_a,
         )
         ec = (cfg.end_color_r, cfg.end_color_g, cfg.end_color_b, cfg.end_color_a)
+        alpha_int = _ALPHA_FADE_MAP.get(cfg.alpha_fade, 1)
 
         p = self._pool.pop() if self._pool else None
         if p is not None:
@@ -421,7 +433,7 @@ class ParticleEmitter:
             p.end_color = ec
             p.rotation = random.uniform(0, 360)
             p.rotation_speed = cfg.rotation_speed
-            p.alpha_fade = cfg.alpha_fade
+            p.alpha_fade = alpha_int
             p.shape = cfg.particle_shape
         else:
             p = Particle(
@@ -436,7 +448,7 @@ class ParticleEmitter:
                 start_scale=cfg.start_scale,
                 end_scale=cfg.end_scale,
                 rotation_speed=cfg.rotation_speed,
-                alpha_fade=cfg.alpha_fade,
+                alpha_fade=alpha_int,
                 shape=cfg.particle_shape,
             )
         return p
@@ -465,6 +477,7 @@ class SpriteBatchRenderer(ParticleRenderer):
         self._tint_surf: Optional[Surface] = None
         self._tint_size: int = 0
         self._particles: List[Particle] = []
+        self._batch: List[Tuple[Surface, Rect]] = []
 
     def on_config_change(self, config: ParticleSystemConfig) -> None:
         self._shape = config.particle_shape
@@ -495,13 +508,17 @@ class SpriteBatchRenderer(ParticleRenderer):
             return
 
         screen_rect = screen.get_rect()
-        batch: List[Tuple[Surface, Rect]] = []
+        batch = self._batch
+        batch.clear()
+
+        needs_rotation = shape not in _SYMMETRIC_SHAPES
 
         for p in particles:
 
             sx = int((p.x - offset_x) * zoom)
             sy = int((p.y - offset_y) * zoom)
             size_px = max(1, int(p.current_size * zoom))
+            size_px = ((size_px + 4) // 8) * 8
             half = size_px // 2 + 1
             if (
                 sx + half < 0
@@ -525,7 +542,7 @@ class SpriteBatchRenderer(ParticleRenderer):
                 draw_surf.fill(color, special_flags=pygame.BLEND_RGBA_MULT)
             _TINTED_CACHE[cache_key] = draw_surf  # move to MRU position
 
-            if p.rotation_speed != 0:
+            if p.rotation_speed != 0 and needs_rotation:
                 rotated = pygame.transform.rotate(draw_surf, p.rotation)
                 dr = rotated.get_rect(center=(sx, sy))
                 screen.blit(rotated, dr)
