@@ -441,6 +441,7 @@ class CollisionRunner:
         self.gravity = 800.0
         self.max_fall_speed = 600.0
         self.jump_strength = -400.0
+        self.horizontal_speed = 200.0
 
         self.ground_snap_tolerance = 2.0
         self.step_height = 4.0
@@ -797,6 +798,7 @@ class CollisionRunner:
         dt: float,
         input_x: float = 0.0,
         jump_pressed: bool = False,
+        velocity: Optional[Vector2] = None,
     ) -> CollisionResult:
         """
         Move sprite with platformer physics (gravity, jumping).
@@ -808,8 +810,11 @@ class CollisionRunner:
             tileset_collision: Tileset collision data
             tile_map: Dictionary mapping (tile_x, tile_y) to tile_id
             dt: Delta time in seconds
-            input_x: Horizontal input (-1 to 1)
-            jump_pressed: Whether jump button is pressed
+            input_x: Horizontal input (-1 to 1) for built-in movement
+            jump_pressed: Whether jump button is pressed for built-in movement
+            velocity: Optional explicit velocity (vx, vy). When provided, the
+                runner skips built-in input/gravity/jump velocity calculation
+                and only resolves collision for that velocity.
 
         Returns:
             CollisionResult with final position and collision info
@@ -824,15 +829,19 @@ class CollisionRunner:
         result.final_x = sprite.x
         result.final_y = sprite.y
 
-        if not getattr(sprite, "on_ground", False):
-            sprite.vy += self.gravity * dt
-            if sprite.vy > self.max_fall_speed:
-                sprite.vy = self.max_fall_speed
+        if velocity is not None:
+            sprite.vx = velocity[0]
+            sprite.vy = velocity[1]
+        else:
+            if not getattr(sprite, "on_ground", False):
+                sprite.vy += self.gravity * dt
+                if sprite.vy > self.max_fall_speed:
+                    sprite.vy = self.max_fall_speed
 
-        if jump_pressed and getattr(sprite, "on_ground", False):
-            sprite.vy = self.jump_strength
+            if jump_pressed and getattr(sprite, "on_ground", False):
+                sprite.vy = self.jump_strength
 
-        sprite.vx = input_x * 200.0
+            sprite.vx = input_x * self.horizontal_speed
 
         delta_x = sprite.vx * dt
         delta_y = sprite.vy * dt
@@ -1325,6 +1334,7 @@ class CollisionRunner:
         dt: float,
         input_x: float = 0.0,
         jump_pressed: bool = False,
+        velocity: Optional[Vector2] = None,
     ) -> CollisionResult:
         """
         Slope-aware platformer movement.
@@ -1360,6 +1370,13 @@ class CollisionRunner:
             jump_pressed:
                 True if jump was pressed during this frame.
 
+            velocity:
+                Optional explicit velocity (vx, vy). When provided, the runner
+                skips built-in input/gravity/jump velocity calculation and only
+                resolves collision for that velocity. This is the preferred
+                path for dash, knockback, wind, moving-platform carry, or a
+                custom controller.
+
         Returns:
             CollisionResult describing the resolved movement and collision
             state after simulation.
@@ -1381,18 +1398,25 @@ class CollisionRunner:
         was_on_ground = getattr(sprite, "on_ground", False)
         jumped = False
 
-        if jump_pressed and was_on_ground:
-            sprite.vy = self.jump_strength
-            sprite.on_ground = False
-            jumped = True
-        elif not was_on_ground:
-            sprite.vy += self.gravity * dt
-            if sprite.vy > self.max_fall_speed:
-                sprite.vy = self.max_fall_speed
+        if velocity is not None:
+            sprite.vx = velocity[0]
+            sprite.vy = velocity[1]
+            if sprite.vy < 0.0:
+                sprite.on_ground = False
+                jumped = True
         else:
-            sprite.vy = min(sprite.vy, 0.0)
+            if jump_pressed and was_on_ground:
+                sprite.vy = self.jump_strength
+                sprite.on_ground = False
+                jumped = True
+            elif not was_on_ground:
+                sprite.vy += self.gravity * dt
+                if sprite.vy > self.max_fall_speed:
+                    sprite.vy = self.max_fall_speed
+            else:
+                sprite.vy = min(sprite.vy, 0.0)
 
-        sprite.vx = input_x * 200.0
+            sprite.vx = input_x * self.horizontal_speed
         delta_x = sprite.vx * dt
         delta_y = sprite.vy * dt
         bottom_offset = old_bottom - old_y
@@ -1662,6 +1686,7 @@ class CollisionRunner:
                 dt,
                 input_x=kwargs.get("input_x", 0.0),
                 jump_pressed=kwargs.get("jump_pressed", False),
+                velocity=kwargs.get("velocity"),
             )
         elif self.mode == MovementMode.RPG:
             return self.move_rpg(sprite, tileset_collision, tile_map, delta_x, delta_y)
@@ -1736,6 +1761,7 @@ class CollisionRunner:
             runner.gravity = 800.0
             runner.max_fall_speed = 600.0
             runner.jump_strength = -400.0
+            runner.horizontal_speed = 200.0
             runner.slide_friction = 0.1
             runner._game_type = "platformer"
             runner._strict = strict

@@ -267,6 +267,43 @@ class TestMovePlatformer:
         assert sprite.x > 137
         assert result.hit_wall_x is False
 
+    def test_explicit_velocity_controls_horizontal_movement(self):
+        tile_map = {}
+        sprite = MockSprite(x=100, y=100)
+        sprite.vx = 0
+        sprite.vy = 0
+        sprite.on_ground = True
+
+        result = self.runner.move_platformer(
+            sprite,
+            self.tileset,
+            tile_map,
+            dt=0.016,
+            input_x=0,
+            velocity=(600.0, 0.0),
+        )
+
+        assert result.final_x == pytest.approx(109.6)
+        assert sprite.vx == pytest.approx(600.0)
+
+    def test_move_convenience_forwards_explicit_velocity(self):
+        sprite = MockSprite(x=100, y=100)
+        sprite.vx = 0
+        sprite.vy = 0
+        sprite.on_ground = True
+
+        result = self.runner.move(
+            sprite,
+            self.tileset,
+            {},
+            dt=0.016,
+            input_x=0,
+            velocity=(600.0, 0.0),
+        )
+
+        assert result.final_x == pytest.approx(109.6)
+        assert sprite.vx == pytest.approx(600.0)
+
 
 class TestMovePlatformerWithSlide:
     def setup_method(self):
@@ -333,6 +370,24 @@ class TestMovePlatformerWithSlide:
 
         assert sprite.x == 103
         assert result.hit_wall_x is True
+
+    def test_explicit_velocity_controls_dash_without_input_scaling(self):
+        sprite = MockSprite(x=100, y=100)
+        sprite.vx = 0
+        sprite.vy = 0
+        sprite.on_ground = True
+
+        result = self.runner.move_platformer_with_slide(
+            sprite,
+            self.tileset,
+            {},
+            dt=0.016,
+            input_x=0,
+            velocity=(600.0, 0.0),
+        )
+
+        assert result.final_x == pytest.approx(109.6)
+        assert sprite.vx == pytest.approx(600.0)
 
 
 class TestMoveRpg:
