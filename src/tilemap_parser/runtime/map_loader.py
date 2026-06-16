@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Tuple, Union
 import pygame
 from pygame import Rect, Surface
 
-from ..parser.map_parse import MapParseError, ParsedLayer, ParsedMap, ParsedTile, parse_map_file
+from ..parser.map_parse import MapParseError, ParsedLayer, ParsedMap, ParsedObject, ParsedTile, parse_map_file
 from ..parser.node_parse import parse_nodes_dict
 from .area_node import AreaNode
 from .particles import ParticleEmitterNode
@@ -233,6 +233,36 @@ class TilemapData:
         if tile is None or not isinstance(tile.ttype, int):
             return None
         return self.get_tile_surface(tile.ttype, tile.variant)
+
+    def get_object_surface(self, obj: ParsedObject, *, copy_surface: bool = True) -> Optional[Surface]:
+        return self.get_image(variant=obj.variant, ttype=obj.ttype, copy_surface=copy_surface)
+
+    def get_object_surface_by_id(
+        self, layer_id_or_name: Union[int, str], object_id: int, *, copy_surface: bool = True
+    ) -> Optional[Tuple[Surface, int, int]]:
+        layer = self.get_layer(layer_id_or_name)
+        if layer is None or layer.layer_type != "object":
+            return None
+        obj = layer.objects.get(object_id)
+        if obj is None:
+            return None
+        surf = self.get_object_surface(obj, copy_surface=copy_surface)
+        if surf is None:
+            return None
+        return surf, obj.area.x, obj.area.y
+
+    def get_object_surfaces(
+        self, layer_id_or_name: Union[int, str], *, copy_surface: bool = True
+    ) -> List[Tuple[Surface, int, int, int]]:
+        layer = self.get_layer(layer_id_or_name)
+        if layer is None or layer.layer_type != "object":
+            return []
+        result: List[Tuple[Surface, int, int, int]] = []
+        for oid, obj in layer.objects.items():
+            surf = self.get_object_surface(obj, copy_surface=copy_surface)
+            if surf is not None:
+                result.append((surf, obj.area.x, obj.area.y, oid))
+        return result
 
     def get_tileset_animation(self, ttype: int) -> Optional[dict]:
         if 0 <= ttype < len(self.parsed.tilesets):
