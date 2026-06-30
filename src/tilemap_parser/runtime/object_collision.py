@@ -224,9 +224,7 @@ def check_collision(
                 depth=result.depth,
             )
 
-    # ------------------------------------------------------------------
     # Capsule pairs
-    # ------------------------------------------------------------------
     elif isinstance(shape_a, CapsuleShape) and isinstance(shape_b, CapsuleShape):
         p1 = (obj_a.x + shape_a.offset[0], obj_a.y + shape_a.offset[1])
         p2 = (p1[0], p1[1] + shape_a.height)
