@@ -1,3 +1,4 @@
+from .camera import Camera
 from .animation_player import AnimationPlayer, SpriteAnimationSet
 from .collision_cache import (
     CollisionCache,
@@ -38,6 +39,7 @@ from .particles import (
 __all__ = [
     "AnimationPlayer",
     "AreaNode",
+    "Camera",
     "CollisionCache",
     "CollisionHit",
     "CollisionResult",

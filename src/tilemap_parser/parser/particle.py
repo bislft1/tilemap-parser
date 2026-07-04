@@ -53,6 +53,23 @@ class ParticleSystemConfig:
     rotation_speed: float = 0.0
     alpha_fade: str = "fade_out"
 
+    def apply_render_scale(self, scale: float) -> None:
+        """Scale dimensionful fields by *scale* (typically ``render_scale``).
+
+        Modifies ``particle_size_min``, ``particle_size_max``,
+        ``speed_min``, ``speed_max``, ``gravity_x``, and ``gravity_y``
+        in place.  Call once after loading config.
+
+        ``start_scale``, ``end_scale``, lifetimes, colors, angles, and
+        counts are intentionally left untouched.
+        """
+        self.particle_size_min = max(1, int(self.particle_size_min * scale))
+        self.particle_size_max = max(1, int(self.particle_size_max * scale))
+        self.speed_min *= scale
+        self.speed_max *= scale
+        self.gravity_x *= scale
+        self.gravity_y *= scale
+
     def to_dict(self) -> JsonDict:
         return {
             "emission_shape": self.emission_shape,
