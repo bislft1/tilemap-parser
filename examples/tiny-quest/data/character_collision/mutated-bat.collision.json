@@ -1,0 +1,12 @@
+{
+  "name": "mutated-bat",
+  "shape": {
+    "type": "circle",
+    "radius": 31.39768122744299,
+    "offset": [48.216039181948595, 38.17103101904283]
+  },
+  "properties": {
+    "collision_layer": 1,
+    "collision_mask": 65535
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "spritesheet_path": "../../assets/SaltyOK Bit-droid/myCharacter-scaled.png",
+  "tile_size": [
+    32,
+    32
+  ],
+  "grid_offset": [
+    0,
+    0
+  ],
+  "animations": {
+    "idle": {
+      "name": "idle",
+      "frames": [
+        {
+          "variant_id": 40,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 41,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 42,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 43,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 44,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 45,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 46,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 47,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "run": {
+      "name": "run",
+      "frames": [
+        {
+          "variant_id": 98,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 99,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 100,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 101,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 102,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 103,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "prepare_jump": {
+      "name": "prepare_jump",
+      "frames": [
+        {
+          "variant_id": 156,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 157,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "jump": {
+      "name": "jump",
+      "frames": [
+        {
+          "variant_id": 214,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "climb": {
+      "name": "climb",
+      "frames": [
+        {
+          "variant_id": 272,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 273,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 20.0
+    },
+    "finish_climb": {
+      "name": "finish_climb",
+      "frames": [
+        {
+          "variant_id": 330,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "aim_climbing": {
+      "name": "aim_climbing",
+      "frames": [
+        {
+          "variant_id": 388,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "slide": {
+      "name": "slide",
+      "frames": [
+        {
+          "variant_id": 504,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "toss": {
+      "name": "toss",
+      "frames": [
+        {
+          "variant_id": 562,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 563,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 564,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 565,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 566,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "climb_side": {
+      "name": "climb_side",
+      "frames": [
+        {
+          "variant_id": 620,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 621,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 622,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 623,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 624,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "kick": {
+      "name": "kick",
+      "frames": [
+        {
+          "variant_id": 736,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 737,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 738,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "hurt": {
+      "name": "hurt",
+      "frames": [
+        {
+          "variant_id": 446,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "aimup": {
+      "name": "aimup",
+      "frames": [
+        {
+          "variant_id": 852,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 853,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "aimdown": {
+      "name": "aimdown",
+      "frames": [
+        {
+          "variant_id": 910,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 911,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "backward_run": {
+      "name": "backward_run",
+      "frames": [
+        {
+          "variant_id": 794,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 795,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 796,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 797,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 798,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 799,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    }
+  }
+}

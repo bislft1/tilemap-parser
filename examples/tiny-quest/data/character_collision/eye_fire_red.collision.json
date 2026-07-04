@@ -1,0 +1,13 @@
+{
+  "name": "eye_fire_red",
+  "shape": {
+    "type": "rectangle",
+    "width": 52.35169771436121,
+    "height": 22.460034350640775,
+    "offset": [0, 11.725459109525696]
+  },
+  "properties": {
+    "collision_layer": 2,
+    "collision_mask": 1
+  }
+}

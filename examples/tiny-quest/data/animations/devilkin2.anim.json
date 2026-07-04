@@ -1,0 +1,138 @@
+{
+  "spritesheet_path": "../../assets/2D RPG Platformer Sprites/enemies/devilkin2-scaled.png",
+  "tile_size": [96, 96],
+  "grid_offset": [0, 0],
+  "animations": {
+    "idle": {
+      "name": "idle",
+      "frames": [
+        {
+          "variant_id": 0,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 1,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 2,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 3,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "run": {
+      "name": "run",
+      "frames": [
+        {
+          "variant_id": 6,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 7,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 8,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 9,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 10,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 11,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "attack": {
+      "name": "attack",
+      "frames": [
+        {
+          "variant_id": 18,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 19,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 20,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 22,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "hurt": {
+      "name": "hurt",
+      "frames": [
+        {
+          "variant_id": 30,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 31,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 32,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 33,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "death": {
+      "name": "death",
+      "frames": [
+        {
+          "variant_id": 36,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 37,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 38,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 39,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 40,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 41,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    }
+  }
+}

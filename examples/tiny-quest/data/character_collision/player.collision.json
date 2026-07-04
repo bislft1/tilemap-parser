@@ -1,0 +1,16 @@
+{
+  "name": "myCharacter-scaled",
+  "shape": {
+    "type": "capsule",
+    "radius": 9.901634109781924,
+    "height": 8.029905152316438,
+    "offset": [
+      368.65103735656453,
+      42.06140794070525
+    ]
+  },
+  "properties": {
+    "collision_layer": 1,
+    "collision_mask": 65535
+  }
+}
