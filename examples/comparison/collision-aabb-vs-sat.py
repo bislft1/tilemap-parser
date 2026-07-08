@@ -1,14 +1,4 @@
-"""
-Naive AABB rect collision vs SAT polygon collision — why bounding boxes lie.
 
-A diamond polygon is filled in purple; its AABB is overlaid as a faint
-red rectangle. Move the character with arrow keys, switch shape with
-1-2-3.  Watch the two collision indicators diverge when the character
-enters the AABB corners but hasn't touched the actual polygon.
-
-AABB uses get_shape_aabb + aabb_overlap (axis-aligned bounding box).
-SAT uses check_collision (Separating Axis Theorem on the exact polygon).
-"""
 
 import math
 import sys
@@ -24,7 +14,7 @@ from tilemap_parser.parser.collision import (
 from tilemap_parser.runtime.object_collision import check_collision
 from tilemap_parser.utils.geometry import aabb_overlap, get_shape_aabb
 
-# ── Config ──────────────────────────────────────────────────────────
+
 SCREEN_W, SCREEN_H = 1000, 700
 FPS = 60
 MOVE_SPEED = 4
@@ -37,7 +27,7 @@ CHAR_DEFS: dict[str, object] = {
     "Capsule": CapsuleShape(radius=16, height=32),
 }
 
-# Diamond (rotated square) — big gap between AABB and actual shape
+
 _DIAMOND = [(0, -70), (70, 0), (0, 70), (-70, 0)]
 POLYGON_TARGET = CollisionPolygon(vertices=_DIAMOND)
 
@@ -65,7 +55,7 @@ class CollidableObject:
         self.collision_mask = 0xFFFFFFFF
 
 
-# ── Drawing helpers ─────────────────────────────────────────────────
+
 
 
 def _offset(shape: object) -> tuple[float, float]:
@@ -118,7 +108,7 @@ def draw_normal_arrow(screen, hit, a, b):
         pygame.draw.line(screen, COLOR_NORMAL, (ex, ey), (px, py), 3)
 
 
-# ── Info overlay ────────────────────────────────────────────────────
+
 
 
 def draw_panel(screen, font, char_name, aabb_result, sat_result, match):
@@ -150,7 +140,7 @@ def draw_panel(screen, font, char_name, aabb_result, sat_result, match):
         screen.blit(font.render(text, True, color), (14, y))
         y += 20
 
-    # Explanation panel
+
     if not match:
         exp_lines = [
             "Naive AABB says COLLIDE because the",
@@ -190,7 +180,7 @@ def draw_controls(screen, font):
         x += lbl.get_width() + dsc.get_width() + 30
 
 
-# ── Main ────────────────────────────────────────────────────────────
+
 
 
 def main():
@@ -231,13 +221,13 @@ def main():
         char.x = max(40, min(SCREEN_W - 40, char.x))
         char.y = max(60, min(SCREEN_H - 60, char.y))
 
-        # Apply shape change
+
         name = CHAR_NAMES[char_idx]
         if char.shape_name != name:
             char.shape_name = name
             char.collision_shape = CHAR_DEFS[name]
 
-        # ── Two collision checks ──
+
         char_aabb = get_shape_aabb(char.x, char.y, char.collision_shape)
         poly_aabb = get_shape_aabb(target.x, target.y, target.collision_shape)
         aabb_result = aabb_overlap(char_aabb, poly_aabb)
@@ -247,16 +237,16 @@ def main():
 
         match = aabb_result == sat_result
 
-        # ── Render ──
+
         screen.fill(COLOR_BG)
 
-        # Grid
+
         for gx in range(0, SCREEN_W, 40):
             pygame.draw.line(screen, (35, 35, 48), (gx, 0), (gx, SCREEN_H), 1)
         for gy in range(0, SCREEN_H, 40):
             pygame.draw.line(screen, (35, 35, 48), (0, gy), (SCREEN_W, gy), 1)
 
-        # ── Polygon AABB overlay (faint red) ──
+
         left, top, right, bottom = poly_aabb
         bw, bh = right - left, bottom - top
         aabb_surf = pygame.Surface((bw, bh), pygame.SRCALPHA)
@@ -264,16 +254,16 @@ def main():
         screen.blit(aabb_surf, (left, top))
         pygame.draw.rect(screen, COLOR_AABB_LINE, (left, top, bw, bh), 2)
 
-        # ── Target polygon ──
+
         draw_filled(screen, target.collision_shape, target.x, target.y, COLOR_TARGET_IDLE)
         draw_outline(screen, target.collision_shape, target.x, target.y, COLOR_WHITE)
 
-        # ── Character ──
+
         cc = COLOR_SAT_COLLIDE if sat_result else COLOR_CHAR_IDLE
         draw_filled(screen, char.collision_shape, char.x, char.y, cc)
         draw_outline(screen, char.collision_shape, char.x, char.y, COLOR_WHITE)
 
-        # Highlight AABB false-positive region
+
         if aabb_result and not sat_result:
             overlap_left = max(char_aabb[0], poly_aabb[0])
             overlap_top = max(char_aabb[1], poly_aabb[1])

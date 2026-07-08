@@ -31,7 +31,7 @@ class SoundManager:
         self._next_sfx_channel = len(self.main_channels)
 
     def add_sound(self, audio_path: Path, ref_key: str, stype: Literal["sfx", "main"]) -> bool:
-        """Adds sound , either sfx or main sound"""
+
         scope = self._bg if stype == "main" else self._sfx
         try:
             scope[ref_key] = pygame.Sound(audio_path)
@@ -57,7 +57,7 @@ class SoundManager:
         channel.play(sound)
 
     def __assign_channel(self, stype: Literal["sfx", "main"]) -> Channel:
-        """Return an appropriate channel for playback."""
+
 
         if stype == "main":
             for idx in self.main_channels:

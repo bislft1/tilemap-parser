@@ -37,7 +37,7 @@ class Player(Entity):
         }
 
         super().__init__(
-            x, y, character_info.shape, animation_states, states, shape_bounds  # type: ignore
+            x, y, character_info.shape, animation_states, states, shape_bounds
         )
 
         self.is_attacking = False

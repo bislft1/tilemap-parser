@@ -1,47 +1,4 @@
-"""
-Particle system example — two loading approaches side by side.
 
-Approach A — via TilemapData.load (recommended):
-    Use this when you already load a map. Nodes are auto-discovered from the
-    `nodes_dir` parameter (or the built-in heuristics if omitted). The parsed
-    particle emitters live in `td.particle_emitters` as ParticleEmitterNode
-    objects, each carrying a ready-to-use ParticleSystemConfig.
-
-    Usage::
-
-        td = TilemapData.load("path/to/map.json", nodes_dir="path/to/nodes")
-        for emitter_node in td.particle_emitters:
-            ps = ParticleSystem(emitter_node.config)
-            ps.update(dt, x, y, w, h)
-            ps.draw(screen, offset_x, offset_y, zoom)
-
-Approach B — via parse_nodes_file + ParticleEmitterNode (explicit):
-    Use this when you don't have a map or want full control over node loading.
-    The steps are: parse the node JSON, filter for particle_emitter nodes, wrap
-    each in ParticleEmitterNode, create a ParticleSystem, then update/draw.
-
-    Usage::
-
-        raw = parse_nodes_file("path/to/nodes/map.nodes.json")
-        for node in raw:
-            if node.node_type == "particle_emitter":
-                pe = ParticleEmitterNode(node)
-                ps = ParticleSystem(pe.config)
-                ...
-
-Rendering cycle (both approaches):
-    Per frame, call `ps.update(dt, area_x, area_y, area_w, area_h)` then
-    `ps.draw(screen, offset_x, offset_y, zoom)`. Zoom applies to both particle
-    size and screen offset. Use offset to scroll the camera.
-
-Modifying parameters at runtime (⚠️  not recommended):
-    You *can* mutate ParticleSystemConfig fields directly on `ps.config` and
-    then call `ps.set_config(ps.config)` to sync the emitter and renderer.
-    This is fragile for anything beyond quick prototyping. If you need complex
-    runtime editing (sliders, colour pickers, emission-shape switches), build a
-    dedicated form editor instead — messing with config fields at runtime is a
-    fast path to inconsistent state.
-"""
 
 import sys
 from pathlib import Path
@@ -68,7 +25,7 @@ def main():
     font = pygame.font.SysFont(None, 22)
 
     map_path = BASE / "data" / "map.json"
-    # Approach 1: via TilemapData.load (map loader)
+
     td = TilemapData.load(map_path, nodes_dir=NODES_DIR)
     left_systems = []
     for pe_node in td.particle_emitters:
@@ -78,7 +35,7 @@ def main():
         )
         left_systems.append((ps, pe_node.rect, pe_node.name))
 
-    # Approach 2: via parse_nodes_file (explicit)
+
     raw = parse_nodes_file(NODES_DIR / "map.nodes.json")
     raw_emitters = [n for n in raw if n.node_type == "particle_emitter"]
     right_systems = []
@@ -100,7 +57,7 @@ def main():
 
         screen.fill((20, 20, 30))
 
-        #  left: map-loader approach
+
         label1 = font.render("TilemapData.load + nodes_dir", True, (200, 200, 100))
         screen.blit(label1, (30, 20))
 
@@ -113,7 +70,7 @@ def main():
             nlabel = font.render(name, True, (100, 200, 100))
             screen.blit(nlabel, (lx, ly - 18))
 
-        #  right: explicit approach
+
         label2 = font.render(
             "parse_nodes_file + ParticleEmitterNode", True, (100, 200, 200)
         )
@@ -127,7 +84,7 @@ def main():
             nlabel = font.render(name, True, (100, 200, 200))
             screen.blit(nlabel, (rx, ry - 18))
 
-        #  click burst
+
         if pygame.mouse.get_pressed()[0]:
             mpos = (mx - 16, my - 16, 32, 32)
             for ps, _, _ in left_systems:

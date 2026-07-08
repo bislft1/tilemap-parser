@@ -4,10 +4,7 @@ T = TypeVar("T", bound=object)
 
 
 class BaseFsm(Generic[T]):
-    """goal is to keep state pure, better.
-    to avoid avoid forced transision and let state handler manage state
-    if tempted to control explicitly use flags
-    """
+
 
     def __init__(self, name: str) -> None:
         self.name = name

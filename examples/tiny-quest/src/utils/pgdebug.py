@@ -27,14 +27,14 @@ class Debug:
 
     @staticmethod
     def draw_all(surface: pygame.Surface):
-        """Draws all registered debug visuals."""
+
         if not _DEBUG_REFS:
             return
 
-        # Sort by priority (high first)
+
         _DEBUG_REFS.sort(key=lambda d: d["priority"], reverse=True)
 
-        # Draw stacked debug texts first
+
         text_refs = [d for d in _DEBUG_REFS if d.get("type") == "text"]
         if text_refs:
             spacing = font.get_height() + 4
@@ -43,7 +43,7 @@ class Debug:
                 w, h = surface.get_size()
                 rw, rh = surf.get_size()
                 x = (w - rw) // 2
-                # y = (h - rh) // 2 - i * spacing
+
                 y = i * spacing
                 surface.blit(surf, (x, y))
 

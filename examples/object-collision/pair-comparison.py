@@ -1,11 +1,4 @@
-"""
-Object Collision Visual Demo — see every shape pair in action.
 
-Move the active (blue) object with arrow keys.
-Change shapes with 1-4 (active) and Q/R/T/Y (target).
-Only the specific narrowphase check for the current pair runs.
-On collision: green tint, depth readout, normal arrow.
-"""
 
 import math
 import sys
@@ -20,7 +13,7 @@ from tilemap_parser.parser.collision import (
 )
 from tilemap_parser.runtime.object_collision import check_collision
 
-# ── Config ──────────────────────────────────────────────────────────
+
 SCREEN_W, SCREEN_H = 1000, 700
 FPS = 60
 MOVE_SPEED = 4
@@ -44,7 +37,7 @@ COLOR_DIM = (140, 140, 160)
 
 
 class CollidableObject:
-    """Minimal object satisfying ICollidableObject protocol."""
+
 
     def __init__(self, x: float, y: float, shape_name: str) -> None:
         self.x = x
@@ -55,7 +48,7 @@ class CollidableObject:
         self.collision_mask = 0xFFFFFFFF
 
 
-# ── Drawing helpers ─────────────────────────────────────────────────
+
 
 
 def _offset(shape: object) -> tuple[float, float]:
@@ -108,7 +101,7 @@ def draw_normal_arrow(screen, hit, a, b):
         pygame.draw.line(screen, COLOR_NORMAL, (ex, ey), (px, py), 3)
 
 
-# ── Info overlay ────────────────────────────────────────────────────
+
 
 
 def draw_info(screen, font, hit, a_name, b_name):
@@ -139,7 +132,7 @@ def draw_controls(screen, font):
         x += lbl.get_width() + dsc.get_width() + 30
 
 
-# ── Main ────────────────────────────────────────────────────────────
+
 
 
 def main():
@@ -152,8 +145,8 @@ def main():
     active = CollidableObject(300, 350, "Rect")
     target = CollidableObject(650, 350, "Circle")
 
-    # active_idx maps: 0=Circle, 1=Rect, 2=Polygon, 3=Capsule
-    # target_idx maps: 0=Circle, 1=Rect, 2=Polygon, 3=Capsule
+
+
     active_idx, target_idx = 1, 0
 
     running = True
@@ -165,10 +158,10 @@ def main():
                 running = False
 
             if event.type == pygame.KEYDOWN:
-                # Active shapes: 1-4
+
                 if pygame.K_1 <= event.key <= pygame.K_4:
                     active_idx = event.key - pygame.K_1
-                # Target shapes: Q/R/T/Y
+
                 elif event.key == pygame.K_q:
                     target_idx = 0
                 elif event.key == pygame.K_r:
@@ -184,35 +177,35 @@ def main():
         active.x += dx * MOVE_SPEED
         active.y += dy * MOVE_SPEED
 
-        # Clamp
+
         active.x = max(40, min(SCREEN_W - 40, active.x))
         active.y = max(60, min(SCREEN_H - 60, active.y))
 
-        # Apply shape changes
+
         for obj, idx in ((active, active_idx), (target, target_idx)):
             name = SHAPE_NAMES[idx]
             if obj.shape_name != name:
                 obj.shape_name = name
                 obj.collision_shape = SHAPE_DEFS[name]
 
-        # ── Single collision check (only this pair) ──
+
         hit = check_collision(active, target)
 
-        # ── Render ──
+
         screen.fill(COLOR_BG)
 
-        # Draw grid hint
+
         for gx in range(0, SCREEN_W, 40):
             pygame.draw.line(screen, (35, 35, 48), (gx, 0), (gx, SCREEN_H), 1)
         for gy in range(0, SCREEN_H, 40):
             pygame.draw.line(screen, (35, 35, 48), (0, gy), (SCREEN_W, gy), 1)
 
-        # Target (drawn first so active appears on top)
+
         tc = COLOR_COLLIDE if hit else COLOR_IDLE_B
         draw_filled(screen, target.collision_shape, target.x, target.y, tc)
         draw_outline(screen, target.collision_shape, target.x, target.y, COLOR_WHITE)
 
-        # Active
+
         ac = COLOR_COLLIDE if hit else COLOR_IDLE_A
         draw_filled(screen, active.collision_shape, active.x, active.y, ac)
         draw_outline(screen, active.collision_shape, active.x, active.y, COLOR_WHITE)

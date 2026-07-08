@@ -1,13 +1,4 @@
-"""
-Movement: naive (add velocity, no collision) vs parser (check + revert).
 
-Two characters, same arrow-key input, same gravity.
-Red (naive): position += velocity — clips through walls and falls through floor.
-Green (parser): checks collision per axis — blocked by walls, stands on floor.
-
-Uses check_collision per-axis (like the parser's move_and_slide) so the green
-character slides along walls naturally.  All self-contained — no tilemap assets.
-"""
 
 import math
 import sys
@@ -21,7 +12,7 @@ from tilemap_parser.parser.collision import (
 )
 from tilemap_parser.runtime.object_collision import check_collision
 
-# ── Config ──────────────────────────────────────────────────────────
+
 SCREEN_W, SCREEN_H = 1000, 700
 FPS = 60
 MOVE_SPEED = 200
@@ -52,13 +43,13 @@ class Char:
         self.collision_mask = 0xFFFFFFFF
 
 
-# ── Scene geometry (floor + wall) ──────────────────────────────────
-# Floor: a wide rectangle across the bottom
+
+
 FLOOR_POLY = CollisionPolygon(vertices=[
     (-500, 0), (500, 0), (500, 40), (-500, 40),
 ])
 
-# Wall: a block sitting on the floor
+
 WALL_POLY = CollisionPolygon(vertices=[
     (0, -120), (48, -120), (48, 0), (0, 0),
 ])
@@ -73,7 +64,7 @@ class StaticObj:
         self.collision_mask = 0xFFFFFFFF
 
 
-# ── Drawing helpers ─────────────────────────────────────────────────
+
 
 
 def draw_poly(screen, poly, x, y, color):
@@ -95,7 +86,7 @@ def draw_char(screen, obj, color, label):
     pygame.draw.rect(screen, COLOR_WHITE, rect, 2)
 
 
-# ── Main ────────────────────────────────────────────────────────────
+
 
 
 def main():
@@ -126,7 +117,7 @@ def main():
                    pygame.key.get_pressed()[pygame.K_LEFT])
         jump = pygame.key.get_pressed()[pygame.K_SPACE]
 
-        # ── Naive movement (no collision) ──
+
         naive.vx = input_x * MOVE_SPEED
         naive.vy += GRAVITY * dt
         if jump and naive.on_ground:
@@ -136,7 +127,7 @@ def main():
         naive.y += naive.vy * dt
         naive.on_ground = False
 
-        # ── Parser movement (per-axis check) ──
+
         parser.vx = input_x * MOVE_SPEED
         parser.vy += GRAVITY * dt
         if jump and parser.on_ground:
@@ -144,7 +135,7 @@ def main():
             parser.on_ground = False
         parser.on_ground = False
 
-        # X-axis
+
         parser.x += parser.vx * dt
         for obs in obstacles:
             hit = check_collision(parser, obs)
@@ -153,7 +144,7 @@ def main():
                 parser.vx = 0
                 break
 
-        # Y-axis
+
         parser.y += parser.vy * dt
         for obs in obstacles:
             hit = check_collision(parser, obs)
@@ -164,26 +155,26 @@ def main():
                 parser.vy = 0
                 break
 
-        # ── Render ──
+
         screen.fill(COLOR_BG)
 
-        # Grid hint
+
         for gx in range(0, SCREEN_W, 40):
             pygame.draw.line(screen, (30, 30, 42), (gx, 0), (gx, SCREEN_H), 1)
         for gy in range(0, SCREEN_H, 40):
             pygame.draw.line(screen, (30, 30, 42), (0, gy), (SCREEN_W, gy), 1)
 
-        # Scene
+
         draw_poly(screen, FLOOR_POLY, floor.x, floor.y, COLOR_FLOOR)
         draw_poly_outline(screen, FLOOR_POLY, floor.x, floor.y, COLOR_WHITE)
         draw_poly(screen, WALL_POLY, wall.x, wall.y, COLOR_WALL)
         draw_poly_outline(screen, WALL_POLY, wall.x, wall.y, COLOR_WHITE)
 
-        # Characters
+
         draw_char(screen, naive, COLOR_NAIVE, "NAIVE")
         draw_char(screen, parser, COLOR_PARSER, "PARSER")
 
-        # State indicators above characters (with dark shadow)
+
         for obj, color, name in [(naive, COLOR_NAIVE, "NAIVE"),
                                   (parser, COLOR_PARSER, "PARSER")]:
             label = font.render(name, True, color)
@@ -194,7 +185,7 @@ def main():
                 screen.blit(shadow, (lx + dx, ly + dy))
             screen.blit(label, (lx, ly))
 
-        # Info panel (dark background)
+
         lines = [
             ("Movement Comparison", (230, 230, 230)),
             ("", (230, 230, 230)),
@@ -210,7 +201,7 @@ def main():
             screen.blit(font.render(text, True, color), (14, y))
             y += 20
 
-        # Controls
+
         cw, ch = 610, 22
         cpanel = pygame.Surface((cw, ch), pygame.SRCALPHA)
         cpanel.fill((0, 0, 0, 150))

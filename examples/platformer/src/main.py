@@ -27,7 +27,7 @@ class Game:
         assert player_collision is not None
         self.player = Player(
             (400, 300),
-            player_collision.shape,  # type: ignore
+            player_collision.shape,
             BASE_PATH_ / "data" / "animations" / "player.animation.json",
         )
         self.collision_runner = CollisionRunner.from_game_type(
@@ -53,7 +53,7 @@ class Game:
         self.collision_runner.move_platformer(
             self.player,
             self.collision_cache.get_tileset_collision(
-                BASE_PATH_ / "data" / "collision" / "Pixel_Woods_Tileset.collision.json"  # type: ignore
+                BASE_PATH_ / "data" / "collision" / "Pixel_Woods_Tileset.collision.json"
             ),
             self.tilemap,
             dt,

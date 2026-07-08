@@ -1,10 +1,4 @@
-"""
-Character shapes (rect / circle / capsule) vs a static polygon.
 
-A character with 3 possible collision shapes moves against a pentagon.
-Switch character shape with 1-2-3; arrow keys to move.
-Shows how each shape type behaves against angled polygon edges.
-"""
 
 import math
 import sys
@@ -19,7 +13,7 @@ from tilemap_parser.parser.collision import (
 )
 from tilemap_parser.runtime.object_collision import check_collision
 
-# ── Config ──────────────────────────────────────────────────────────
+
 SCREEN_W, SCREEN_H = 1000, 700
 FPS = 60
 MOVE_SPEED = 4
@@ -32,7 +26,7 @@ CHAR_DEFS: dict[str, object] = {
     "Capsule": CapsuleShape(radius=16, height=32),
 }
 
-# Regular pentagon pointing upward, radius ~65
+
 _PENTA = [
     (0.0, -65.0),
     (61.8, -20.1),
@@ -61,7 +55,7 @@ class CollidableObject:
         self.collision_mask = 0xFFFFFFFF
 
 
-# ── Drawing helpers ─────────────────────────────────────────────────
+
 
 
 def _offset(shape: object) -> tuple[float, float]:
@@ -114,7 +108,7 @@ def draw_normal_arrow(screen, hit, a, b):
         pygame.draw.line(screen, COLOR_NORMAL, (ex, ey), (px, py), 3)
 
 
-# ── Info overlay ────────────────────────────────────────────────────
+
 
 
 def draw_info(screen, font, hit, char_name):
@@ -145,7 +139,7 @@ def draw_controls(screen, font):
         x += lbl.get_width() + dsc.get_width() + 30
 
 
-# ── Main ────────────────────────────────────────────────────────────
+
 
 
 def main():
@@ -161,7 +155,7 @@ def main():
     wall = CollidableObject(650, 350, POLYGON_WALL)
     wall.shape_name = "Polygon"
 
-    char_idx = 0  # 0=Rect, 1=Circle, 2=Capsule
+    char_idx = 0
 
     running = True
     while running:
@@ -184,30 +178,30 @@ def main():
         char.x = max(40, min(SCREEN_W - 40, char.x))
         char.y = max(60, min(SCREEN_H - 60, char.y))
 
-        # Apply shape change
+
         name = CHAR_NAMES[char_idx]
         if char.shape_name != name:
             char.shape_name = name
             char.collision_shape = CHAR_DEFS[name]
 
-        # ── Single collision check (character vs polygon) ──
+
         hit = check_collision(char, wall)
 
-        # ── Render ──
+
         screen.fill(COLOR_BG)
 
-        # Grid hint
+
         for gx in range(0, SCREEN_W, 40):
             pygame.draw.line(screen, (35, 35, 48), (gx, 0), (gx, SCREEN_H), 1)
         for gy in range(0, SCREEN_H, 40):
             pygame.draw.line(screen, (35, 35, 48), (0, gy), (SCREEN_W, gy), 1)
 
-        # Wall (behind character)
+
         wc = COLOR_COLLIDE if hit else COLOR_WALL_IDLE
         draw_filled(screen, wall.collision_shape, wall.x, wall.y, wc)
         draw_outline(screen, wall.collision_shape, wall.x, wall.y, COLOR_WHITE)
 
-        # Character
+
         cc = COLOR_COLLIDE if hit else COLOR_CHAR_IDLE
         draw_filled(screen, char.collision_shape, char.x, char.y, cc)
         draw_outline(screen, char.collision_shape, char.x, char.y, COLOR_WHITE)

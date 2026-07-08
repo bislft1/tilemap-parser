@@ -1,14 +1,4 @@
-"""
-Full preset browser — cycle through all 55+ editor presets with keyboard.
 
-Controls:
-  ← / →  or  ↑ / ↓   — previous / next preset
-  Space               — burst emission at cursor
-  Esc / Q             — quit
-
-Configs sourced from tilemap-editor's particle_presets.py (55 presets,
-11 categories) and rendered using tilemap-parser's runtime.
-"""
 
 import sys
 from pathlib import Path
@@ -18,7 +8,7 @@ import pygame
 
 from tilemap_parser.runtime.particles import ParticleSystem
 
-# ── 55 presets copied from tilemap-editor ──────────────────────────────────
+
 PresetEntry = Dict[str, Any]
 
 PRESETS: List[PresetEntry] = []
@@ -28,7 +18,7 @@ def _p(name: str, category: str, desc: str, config: dict) -> PresetEntry:
     return {"name": name, "category": category, "description": desc, "config": config}
 
 
-# Fire & Heat (6)
+
 PRESETS.append(
     _p(
         "Campfire",
@@ -245,7 +235,7 @@ PRESETS.append(
     )
 )
 
-# Water & Liquid (6)
+
 PRESETS.append(
     _p(
         "Rain",
@@ -462,7 +452,7 @@ PRESETS.append(
     )
 )
 
-# Ice & Cold (5)
+
 PRESETS.append(
     _p(
         "Snow",
@@ -643,7 +633,7 @@ PRESETS.append(
     )
 )
 
-# Smoke & Gas (5)
+
 PRESETS.append(
     _p(
         "Smoke",
@@ -824,7 +814,7 @@ PRESETS.append(
     )
 )
 
-# Nature (6)
+
 PRESETS.append(
     _p(
         "Falling Leaves",
@@ -1041,7 +1031,7 @@ PRESETS.append(
     )
 )
 
-# Magic (8)
+
 PRESETS.append(
     _p(
         "Magic Sparkles",
@@ -1330,7 +1320,7 @@ PRESETS.append(
     )
 )
 
-# Combat (7)
+
 PRESETS.append(
     _p(
         "Explosion",
@@ -1583,7 +1573,7 @@ PRESETS.append(
     )
 )
 
-# Celebration (6)
+
 PRESETS.append(
     _p(
         "Confetti",
@@ -1800,7 +1790,7 @@ PRESETS.append(
     )
 )
 
-# Atmospheric (6)
+
 PRESETS.append(
     _p(
         "Starry Sky",
@@ -2017,7 +2007,7 @@ PRESETS.append(
     )
 )
 
-# Sci-Fi / Tech (6)
+
 PRESETS.append(
     _p(
         "Laser Sparks",
@@ -2234,7 +2224,7 @@ PRESETS.append(
     )
 )
 
-# Feedback (5)
+
 PRESETS.append(
     _p(
         "Alert Ping",
@@ -2435,12 +2425,12 @@ def build_particle_system(config: dict) -> ParticleSystem:
     return ParticleSystem(cfg)
 
 
-# ── Profiler (sliding-window) ────────────────────────────────────────────────
+
 import collections
 import time as _time
 from tilemap_parser.runtime import particles as _particles_mod
 
-_WINDOW = 120  # 2-second rolling window at 60fps
+_WINDOW = 120
 
 
 class Profiler:
@@ -2512,7 +2502,7 @@ def _render_profiler(screen, snap: dict, font):
         screen.blit(surf, (SCREEN_W - 252, SCREEN_H - len(lines) * 22 - 24 + i * 22))
 
 
-# ── Main ─────────────────────────────────────────────────────────────────────
+
 
 def main():
     pygame.init()

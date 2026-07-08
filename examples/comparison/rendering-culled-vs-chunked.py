@@ -1,15 +1,4 @@
-"""
-Rendering: viewport cull (cell-by-cell) vs chunked cull (32×32).
 
-A sparse 500×500 procedurally generated tile grid (~15% filled).
-Left panel scans the visible tile range cell-by-cell — every cell in
-the viewport is visited and checked against the tile map.
-Right panel uses a pre-built 32×32 chunk index — empty chunks are
-skipped entirely, only populated chunks are iterated.
-
-Same sparse data, same camera (arrows to pan).  For typical sparse
-grids the chunked version visits ~50× fewer "cells".
-"""
 
 import random
 import sys
@@ -17,7 +6,7 @@ import time
 
 import pygame
 
-# ── Config ──────────────────────────────────────────────────────────
+
 SCREEN_W, SCREEN_H = 1200, 700
 TS = 16
 GRID_W, GRID_H = 500, 500
@@ -126,7 +115,7 @@ def main():
         screen.fill(COLOR_BG)
         old_clip = screen.get_clip()
 
-        # ── Left: Viewport Cull (cell-by-cell) ──
+
         screen.set_clip(left_rect)
         t0 = time.perf_counter_ns()
         cull_visited = 0
@@ -147,10 +136,10 @@ def main():
                 cull_drawn += 1
         t1 = time.perf_counter_ns()
 
-        # ── Divider ──
+
         pygame.draw.line(screen, COLOR_DIVIDER, (mid, 0), (mid, SCREEN_H), 3)
 
-        # ── Right: Chunked ──
+
         screen.set_clip(right_rect)
         t2 = time.perf_counter_ns()
         chunk_visited = 0
@@ -174,7 +163,7 @@ def main():
 
         screen.set_clip(old_clip)
 
-        # ── Info ──
+
         chunk_reduction = (1 - chunk_visited / max(cull_visited, 1)) * 100
         for px, label, color, v, d, ns, red in [
             (0, "Cull (cell-by-cell)", COLOR_CULL, cull_visited, cull_drawn, t1 - t0, None),
@@ -182,7 +171,7 @@ def main():
         ]:
             draw_panel_info(screen, font, px, label, color, total_tiles, v, d, ns, red)
 
-        # ── Chunk grid overlay on right panel ──
+
         screen.set_clip(right_rect)
         for cx in range(min_cx, max_cx + 1):
             lx = cx * CHUNK_SIZE * TS - cam_x + right_rect.x
@@ -194,7 +183,7 @@ def main():
                 pygame.draw.line(screen, COLOR_CHUNK_LINE, (right_rect.left, ly), (right_rect.right, ly), 1)
         screen.set_clip(old_clip)
 
-        # Legend
+
         lw, lh = 660, 22
         lpanel = pygame.Surface((lw, lh), pygame.SRCALPHA)
         lpanel.fill((0, 0, 0, 150))

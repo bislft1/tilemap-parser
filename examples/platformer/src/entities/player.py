@@ -103,14 +103,14 @@ class Player:
         frame = (
             self.animation_states[self.current_state.name]
             .get_current_image()
-            .subsurface(self._shape_bound[self.current_state.name])  # type: ignore
+            .subsurface(self._shape_bound[self.current_state.name])
         )
         left, _, right, bottom = get_shape_aabb(self.x, self.y, self.collision_shape)
-        frame_rect = frame.get_rect(midbottom=((left + right) * 0.5 - offset[0], bottom - offset[1]))  # type: ignore
+        frame_rect = frame.get_rect(midbottom=((left + right) * 0.5 - offset[0], bottom - offset[1]))
         if self.facing:
             frame = transform.flip(frame, True, False)
 
-        surface.blit(frame, frame_rect)  # type: ignore
+        surface.blit(frame, frame_rect)
 
 
 class IdleFsm(FsmBase["Player"]):

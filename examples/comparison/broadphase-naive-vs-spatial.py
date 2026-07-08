@@ -1,11 +1,4 @@
-"""
-Broadphase: naive O(n²) vs spatial hashing.
 
-N bouncing objects (default 100) inside a visible wall boundary.
-Left panel checks every (i, j) pair; right panel uses
-ObjectCollisionManager's uniform grid.  Shows the candidate-pair
-count for each method — the gap widens with N.
-"""
 
 import math
 import random
@@ -17,13 +10,13 @@ from tilemap_parser.parser.collision import CircleShape
 from tilemap_parser.runtime.object_collision import ObjectCollisionManager
 from tilemap_parser.utils.geometry import aabb_overlap, get_shape_aabb
 
-# ── Config ──────────────────────────────────────────────────────────
+
 SCREEN_W, SCREEN_H = 1200, 700
 FPS = 60
 N_OBJECTS = 100
 SPEED = 120
 RADIUS = 10
-MARGIN = 60  # wall boundary inset from screen edge
+MARGIN = 60
 
 COLOR_BG = (20, 20, 30)
 COLOR_DIVIDER = (60, 60, 80)
@@ -77,7 +70,7 @@ def main():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
 
-        # ── Move with wall bounce ──
+
         l, t, r, b = BOUNDS
         for o in objects:
             o.x += o.vx * dt
@@ -95,7 +88,7 @@ def main():
                 o.y = b - RADIUS
                 o.vy = -abs(o.vy)
 
-        # ── Naive broadphase ──
+
         naive_candidates = 0
         for i in range(N_OBJECTS):
             aabb_i = get_shape_aabb(objects[i].x, objects[i].y, objects[i].collision_shape)
@@ -104,7 +97,7 @@ def main():
                 if aabb_overlap(aabb_i, aabb_j):
                     naive_candidates += 1
 
-        # ── Spatial broadphase ──
+
         spatial_candidates = 0
         obj_tuple, grid = manager._build_spatial_index()
         checked_pairs = set()
@@ -128,20 +121,20 @@ def main():
 
         total_pairs = N_OBJECTS * (N_OBJECTS - 1) // 2
 
-        # ── Render ──
+
         screen.fill(COLOR_BG)
 
-        # Wall boundary
+
         pygame.draw.rect(screen, COLOR_BOUNDARY, (l, t, r - l, b - t), 2)
 
-        # Divider
+
         pygame.draw.line(screen, COLOR_DIVIDER, (mid, 0), (mid, SCREEN_H), 3)
 
-        # Objects
+
         for o in objects:
             pygame.draw.circle(screen, COLOR_OBJECT, (o.x, o.y), RADIUS)
 
-        # Panel headers (dark panel for readability)
+
         for px, panel_label, cand_count, color in [
             (10, "Naive O(n²)", naive_candidates, COLOR_CANDIDATE_NAIVE),
             (mid + 10, "Spatial Hashing", spatial_candidates, COLOR_CANDIDATE_SPATIAL),
@@ -163,7 +156,7 @@ def main():
                 screen.blit(font.render(line, True, c), (px + 6, y))
                 y += 20
 
-        # Legend
+
         lw, lh = 580, 22
         lpanel = pygame.Surface((lw, lh), pygame.SRCALPHA)
         lpanel.fill((0, 0, 0, 150))

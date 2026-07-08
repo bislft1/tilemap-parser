@@ -1,13 +1,4 @@
-"""
-Rendering: naive (draw every tile) vs viewport cull.
 
-A sparse 500×500 procedurally generated tile grid (~15% filled).
-Left panel draws ALL tiles every frame unconditionally.
-Right panel computes the visible tile range and only draws what's
-on screen.  Same camera (arrows), same sparse data.
-
-Draw time and cells visited shown per method.
-"""
 
 import random
 import sys
@@ -15,11 +6,11 @@ import time
 
 import pygame
 
-# ── Config ──────────────────────────────────────────────────────────
+
 SCREEN_W, SCREEN_H = 1200, 700
-TS = 16  # tile size (px)
-GRID_W, GRID_H = 500, 500  # 250 000 cells
-FILL_RATIO = 0.15  # ~37 500 tiles
+TS = 16
+GRID_W, GRID_H = 500, 500
+FILL_RATIO = 0.15
 CAM_SPEED = 500
 
 _PALETTE = [
@@ -110,7 +101,7 @@ def main():
         screen.fill(COLOR_BG)
         old_clip = screen.get_clip()
 
-        # ── Left: Naive (draw every tile unconditionally) ──
+
         screen.set_clip(left_rect)
         t0 = time.perf_counter_ns()
         naive_visited = total_tiles
@@ -120,10 +111,10 @@ def main():
             pygame.draw.rect(screen, color, (sx, sy, TS, TS))
         t1 = time.perf_counter_ns()
 
-        # ── Divider ──
+
         pygame.draw.line(screen, COLOR_DIVIDER, (mid, 0), (mid, SCREEN_H), 3)
 
-        # ── Right: Viewport Cull ──
+
         screen.set_clip(right_rect)
         t2 = time.perf_counter_ns()
         cull_visited = 0
@@ -146,7 +137,7 @@ def main():
 
         screen.set_clip(old_clip)
 
-        # ── Info ──
+
         cull_reduction = (1 - cull_visited / max(total_tiles, 1)) * 100
         for px, label, color, v, d, ns, red in [
             (0, "Naive (draw all)", (255, 140, 140), naive_visited, naive_visited, t1 - t0, None),
@@ -154,7 +145,7 @@ def main():
         ]:
             draw_panel_info(screen, font, px, label, color, total_tiles, v, d, ns, red)
 
-        # Legend
+
         lw, lh = 620, 22
         lpanel = pygame.Surface((lw, lh), pygame.SRCALPHA)
         lpanel.fill((0, 0, 0, 150))

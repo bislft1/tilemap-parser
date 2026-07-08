@@ -25,7 +25,7 @@ class Entity(ICollidableSprite):
         states: Dict[str, BaseFsm],
         shape_bounds: Dict[str, Rect],
     ) -> None:
-        """assumption: animation file have same exact keys"""
+
         if len(states) == 0:
             raise ValueError("required at least one state")
 
@@ -79,12 +79,12 @@ class Entity(ICollidableSprite):
         current_frame = (
             self.animation_states[self.current_state.name]
             .get_current_image()
-            .subsurface(self._shape_bounds[self.current_state.name])  # type: ignore
+            .subsurface(self._shape_bounds[self.current_state.name])
         )
         left, _, right, bottom = get_shape_aabb(self.x, self.y, self.collision_shape)
-        pos = current_frame.get_rect(  # type: ignore
+        pos = current_frame.get_rect(
             midbottom=((left + right) * 0.5 - offset[0], bottom + 10 - offset[1])
         )
         if self.flipped:
-            current_frame = pygame.transform.flip(current_frame, True, False)  # type: ignore
-        surface.blit(current_frame, pos)  # type: ignore
+            current_frame = pygame.transform.flip(current_frame, True, False)
+        surface.blit(current_frame, pos)

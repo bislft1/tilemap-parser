@@ -84,7 +84,7 @@ class Devilkin2(Entity):
         if self.invulnerable_timer > 0:
             self.invulnerable_timer -= dt
 
-        # FSM sets vx/vy for physics to use — position is handled by move_platformer in scene
+
         StateManager.update(self)
         self.animation_states[self.current_state.name].update(dt * 1000)
 
