@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.0.0 — 2026-07-11
+
+### Major Features Added
+- **Camera system**: New `Camera` class with centered or deadzone follow modes, lerp smoothing, screen-shake effects, and bounds clamping
+- **Particle system**: Full particle system with configurable emitters, 8 particle shapes, color transitions, alpha fading, gravity, rotation, and batch rendering with `ParticleSystem`, `ParticleEmitter`, `ParticleRenderer`, and `SpriteBatchRenderer`
+- **Chunked tile rendering**: `TileLayerRenderer` now uses chunk-based culling for efficient rendering of large maps
+- **Render stats**: `LayerRenderStats` provides drawn/skipped tile counts and visible layer info for debugging
+
+### New Utilities
+- `clear_texture_caches()` to clear internal particle texture caches
+- `parse_particle_file()` and `parse_particle_dict()` to load particle configs
+
+### Updates
+- Updated docs link from deepwiki to vercel
+
 ## 3.0.0 — 2026-05-18
 
 ### Major restructuring
