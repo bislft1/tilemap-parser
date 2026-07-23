@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { motion } from "framer-motion";
 import { CodeBlock } from "../components/CodeBlock";
 import type { ClassEntry, ApiEntry } from "../config/api-config";
 
@@ -11,11 +10,9 @@ export function ClassReference({ cls }: ClassReferenceProps) {
   const ref = useRef<HTMLElement>(null);
 
   return (
-    <motion.section
+    <section
       ref={ref}
       id={`cls-${cls.name}`}
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
       className="mb-12 scroll-mt-8"
     >
       <div className="flex items-center gap-2">
@@ -79,7 +76,7 @@ export function ClassReference({ cls }: ClassReferenceProps) {
           ))}
         </div>
       )}
-    </motion.section>
+    </section>
   );
 }
 
@@ -89,10 +86,8 @@ interface FunctionReferenceProps {
 
 export function FunctionReference({ fn }: FunctionReferenceProps) {
   return (
-    <motion.div
+    <div
       id={`fn-${fn.name}`}
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
       className="mb-8 scroll-mt-8"
     >
       <code className="font-mono text-sm text-zinc-200">{fn.signature}</code>
@@ -128,6 +123,6 @@ export function FunctionReference({ fn }: FunctionReferenceProps) {
           ))}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

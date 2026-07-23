@@ -1,40 +1,41 @@
-import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { CodeBlock } from "../components/CodeBlock";
-import demoSrc from "../../../examples/demo/main.py?raw";
 
 const examples = [
   {
-    id: "demo",
-    title: "All features demo",
+    id: "platformer",
+    title: "Platformer Example",
     description:
-      "A single-file pygame-ce demo that showcases tile map parsing, tile rendering, tile-vs-player collision, object-to-object collision with mixed shapes, and sprite animation — no external assets needed.",
+      "A platformer game example with gravity, jumping, and tile collision.",
     difficulty: "Intermediate",
-    projectPath: "examples/demo",
+    projectPath: "examples/platformer",
     runCommand: "python main.py",
     highlights: [
-      "Inline map data parsed via parse_map_dict() — no JSON files required",
-      "Inline tileset collision via parse_tileset_collision()",
-      "Tile rendering with TileLayerRenderer and viewport culling",
-      "Tile-vs-player collision with CollisionRunner.move_and_slide()",
-      "Object-to-object collision with circle, capsule, and rectangle shapes",
-      "Sprite animation with AnimationPlayer and programmatic spritesheet",
-      "pygame-ce shape drawing for collision debug visualization",
-      "Camera follow, collision tile highlights, and HUD overlay",
+      "Tile map parsing and rendering",
+      "Player collision with tiles",
+      "Gravity and jumping physics",
+      "Camera follow system",
     ],
     features: [
-      "Inline data construction",
-      "Tile rendering and collision",
-      "Object-to-object collision",
-      "Animation playback",
-      "Camera-follow movement",
-      "Debug collision visualization",
-      "Single-file, zero external assets",
+      "Tile rendering",
+      "Collision detection",
+      "Platformer physics",
+      "Camera system",
     ],
-    code: demoSrc,
-    downloadUrl: "/examples/demo.zip",
+    code: `# Platformer example
+from tilemap_parser import load_map, CollisionRunner
+
+# Load your map
+tilemap_data = load_map("path/to/map.json")
+
+# Create collision runner
+runner = CollisionRunner.from_game_type('platformer', (32, 32))
+
+# Game loop
+result = runner.move(player, tileset, tile_map, dt, input_x, jump_pressed)`,
+    downloadUrl: "/examples/platformer.zip",
     sourceUrl:
-      "https://github.com/FluffyBrudy/tilemap-parser/tree/main/examples/demo",
+      "https://github.com/FluffyBrudy/tilemap-parser/tree/main/examples/platformer",
   },
 ];
 
@@ -58,9 +59,7 @@ export function Examples() {
 
   if (selectedExample) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div
         className="max-w-5xl"
       >
         {/* Breadcrumb */}
@@ -205,14 +204,12 @@ export function Examples() {
             Back to Examples
           </button>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className="max-w-6xl"
     >
       <section className="mb-12">
@@ -228,12 +225,9 @@ export function Examples() {
       </section>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {examples.map((example, idx) => (
-          <motion.div
+        {examples.map((example) => (
+          <div
             key={example.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
             onClick={() => navigate(`/examples/${example.id}`)}
             className="group cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 transition-all hover:border-cyan-700/60 hover:bg-zinc-900"
           >
@@ -297,7 +291,7 @@ export function Examples() {
                 />
               </svg>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 
@@ -346,6 +340,6 @@ export function Examples() {
           </div>
         </div>
       </section>
-    </motion.div>
+    </div>
   );
 }

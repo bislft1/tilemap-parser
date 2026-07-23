@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { motion } from "framer-motion";
 import { CodeBlock } from "../components/CodeBlock";
 
 export function CollisionRunnerPage() {
@@ -16,11 +15,7 @@ export function CollisionRunnerPage() {
   }, [section]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="max-w-3xl space-y-12"
-    >
+    <div className="max-w-3xl space-y-12">
       <section id="overview">
         <h2 className="text-2xl font-semibold text-zinc-100 mb-4">Collision Runner</h2>
         <p className="text-zinc-400 mb-4">
@@ -137,7 +132,7 @@ result = runner.move(player, tileset_collision, tile_map, dx, dy)
 if result.collided:
     print("blocked by wall")`} />
       </section>
-    </motion.div>
+    </div>
   );
 }
 

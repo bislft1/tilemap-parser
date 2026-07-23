@@ -1,10 +1,7 @@
-import { motion } from "framer-motion";
 
 export function TechnicalPage() {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <div
       className="max-w-4xl space-y-12"
     >
       <div>
@@ -18,7 +15,7 @@ export function TechnicalPage() {
       <PerformanceSection />
       <ErrorHandlingSection />
       <ArchitectureSection />
-    </motion.div>
+    </div>
   );
 }
 

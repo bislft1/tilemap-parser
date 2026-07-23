@@ -6,7 +6,6 @@ interface CodeBlockProps {
 
 export function CodeBlock({
   code,
-  language = "python",
   title,
 }: CodeBlockProps) {
   return (

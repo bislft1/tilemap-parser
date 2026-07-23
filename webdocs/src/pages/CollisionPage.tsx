@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { motion } from "framer-motion";
 import { CodeBlock } from "../components/CodeBlock";
 
 export function CollisionPage() {
@@ -16,9 +15,7 @@ export function CollisionPage() {
   }, [section]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <div
       className="max-w-3xl space-y-12"
     >
       <section id="overview">
@@ -249,7 +246,7 @@ for hit in manager.check_all_collisions():
     # hit.normal, hit.depth available for custom response`}
         />
       </section>
-    </motion.div>
+    </div>
   );
 }
 

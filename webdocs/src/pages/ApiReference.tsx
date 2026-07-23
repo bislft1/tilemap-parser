@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { apiConfig } from "../config/api-config";
 import { ClassReference, FunctionReference } from "../components/ApiReference";
 
@@ -19,9 +18,7 @@ const classGroups = {
 
 export function ApiReference() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className="max-w-3xl"
     >
       <h2 className="text-2xl font-semibold text-zinc-100 mb-4">API Reference</h2>
@@ -46,6 +43,6 @@ export function ApiReference() {
           </section>
         )
       ))}
-    </motion.div>
+    </div>
   );
 }

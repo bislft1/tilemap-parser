@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 export function JsonFormatsPage() {
   const [activeFormat, setActiveFormat] = useState<"tilemap" | "animation" | "tileset" | "character">("tilemap");
@@ -12,9 +11,7 @@ export function JsonFormatsPage() {
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <div
       className="max-w-4xl space-y-8"
     >
       <div>
@@ -44,7 +41,7 @@ export function JsonFormatsPage() {
       {activeFormat === "animation" && <AnimationFormat />}
       {activeFormat === "tileset" && <TilesetCollisionFormat />}
       {activeFormat === "character" && <CharacterCollisionFormat />}
-    </motion.div>
+    </div>
   );
 }
 
