@@ -33,7 +33,7 @@ function App() {
         <Seo />
         <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
         <Sidebar onSearchOpen={() => setSearchOpen(true)} />
-        <main className="ml-64 p-8 lg:p-12">
+        <main className="ml-64 p-8 lg:p-12 max-w-4xl">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/installation" element={<Installation />} />

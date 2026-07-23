@@ -1,37 +1,121 @@
-import { motion } from "framer-motion";
 import { CodeBlock } from "../components/CodeBlock";
-import demoSrc from "../../../examples/demo/main.py?raw";
 
 export function QuickStart() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="max-w-5xl"
-    >
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-zinc-100 mb-4">Quick Start</h2>
-        <p className="text-zinc-400 mb-4 max-w-3xl leading-relaxed">
-          This single-file demo uses every major feature of{" "}
-          <code className="text-cyan-300">tilemap-parser</code> — tile map
-          parsing, tile rendering with viewport culling, tile-vs-player collision,
-          object-to-object collision (circle, capsule, rect), and sprite animation.
-          All data is inlined so it runs with just{" "}
-          <code className="px-1.5 py-0.5 rounded bg-zinc-800 text-cyan-200 text-sm">
-            pip install tilemap-parser pygame-ce
-          </code>
-          .
-        </p>
-        <p className="text-zinc-500 text-sm mb-6">
-          You can also{" "}
-          <a href="/examples" className="text-cyan-400 hover:text-cyan-300 underline">
-            browse the examples page
-          </a>{" "}
-          to download the source as a zip.
+    <div id="main-content" className="space-y-12">
+      <section>
+        <h1 className="text-4xl font-semibold text-zinc-100 mb-4">
+          Quick Start
+        </h1>
+        <p className="text-lg text-zinc-400 max-w-3xl">
+          Load your first tilemap and render it in under 5 minutes.
         </p>
       </section>
 
-      <CodeBlock code={demoSrc} title="examples/demo/main.py" />
-    </motion.div>
+      <section>
+        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
+          Prerequisites
+        </h2>
+        <p className="text-zinc-400 mb-4">
+          Before starting, ensure you have:
+        </p>
+        <ul className="space-y-2 text-zinc-400">
+          <li>• Python 3.10+ installed</li>
+          <li>• pygame-ce installed (<code className="text-zinc-200">pip install pygame-ce</code>)</li>
+          <li>• A tilemap-editor export (map.json) with associated tileset images</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
+          Load a Map
+        </h2>
+        <p className="text-zinc-400 mb-4">
+          Use <code className="text-zinc-200">load_map()</code> to parse your map JSON and load all tileset images:
+        </p>
+        <CodeBlock
+          code={`from tilemap_parser import load_map
+
+data = load_map("path/to/map.json", extra_search_base="assets/")`}
+          language="python"
+        />
+        <p className="text-zinc-400 mt-4">
+          The <code className="text-zinc-200">extra_search_base</code> parameter tells the loader where to find tileset images relative to the map file.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
+          Create a Renderer
+        </h2>
+        <p className="text-zinc-400 mb-4">
+          Initialize a <code className="text-zinc-200">TileLayerRenderer</code> with your loaded map data:
+        </p>
+        <CodeBlock
+          code={`from tilemap_parser import TileLayerRenderer
+
+renderer = TileLayerRenderer(data)
+renderer.warm_cache()  # Pre-load tiles for smoother rendering`}
+          language="python"
+        />
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
+          Render Loop
+        </h2>
+        <p className="text-zinc-400 mb-4">
+          In your game loop, render visible tiles each frame:
+        </p>
+        <CodeBlock
+          code={`import pygame
+from tilemap_parser import Camera
+
+# Setup
+screen = pygame.display.set_mode((800, 600))
+camera = Camera(viewport_width=800, viewport_height=600)
+
+# Game loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    # Update camera to follow player
+    camera.follow(player)
+    camera.update(dt)
+    
+    # Render
+    screen.fill((0, 0, 0))
+    renderer.render(screen, camera.offset)
+    pygame.display.flip()`}
+          language="python"
+        />
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
+          Next Steps
+        </h2>
+        <ul className="space-y-2 text-zinc-400">
+          <li>
+            <a href="/collision" className="text-blue-600 hover:text-blue-500">
+              Collision Guide
+            </a> — Add tile-based collision detection and response
+          </li>
+          <li>
+            <a href="/examples/full-game" className="text-blue-600 hover:text-blue-500">
+              Full Demo
+            </a> — See a complete working example with all features
+          </li>
+          <li>
+            <a href="/api" className="text-blue-600 hover:text-blue-500">
+              API Reference
+            </a> — Explore all available classes and methods
+          </li>
+        </ul>
+      </section>
+    </div>
   );
 }

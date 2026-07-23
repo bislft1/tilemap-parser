@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { allClasses, allFunctions } from "../config";
 
 interface SearchModalProps {
@@ -86,66 +85,58 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/70 z-50 flex items-start justify-center pt-[15vh]"
-        onClick={onClose}
+    <div
+      className="fixed inset-0 bg-black/70 z-50 flex items-start justify-center pt-[15vh]"
+      onClick={onClose}
+    >
+      <div
+        className="bg-zinc-900 border border-zinc-700 rounded-lg w-full max-w-lg shadow-2xl"
+        onClick={e => e.stopPropagation()}
       >
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="bg-zinc-900 border border-zinc-700 rounded-lg w-full max-w-lg shadow-2xl"
-          onClick={e => e.stopPropagation()}
-        >
-          <input
-            ref={inputRef}
-            type="text"
-            value={query}
-            onChange={e => { setQuery(e.target.value); setSelectedIndex(0); }}
-            placeholder="Search docs, functions, classes..."
-            className="w-full px-4 py-3 bg-transparent text-zinc-100 placeholder-zinc-500 outline-none text-sm"
-          />
-          {results.length > 0 && (
-            <div className="border-t border-zinc-800 max-h-96 overflow-y-auto">
-              {results.map((result, i) => (
-                <button
-                  key={`${result.type}-${result.name}`}
-                  onClick={() => handleSelect(result)}
-                  onMouseEnter={() => setSelectedIndex(i)}
-                  className={`w-full px-4 py-2.5 text-left flex items-center gap-3 transition-colors ${
-                    i === selectedIndex ? "bg-zinc-800" : "hover:bg-zinc-800/50"
-                  }`}
-                >
-                  <span className={`text-xs px-2 py-0.5 rounded shrink-0 ${
-                    result.type === "function" ? "bg-green-900/50 text-green-400" :
-                    result.type === "class" ? "bg-blue-900/50 text-blue-400" :
-                    "bg-zinc-700 text-zinc-400"
-                  }`}>
-                    {result.type}
-                  </span>
-                  <div className="min-w-0">
-                    <div className="text-sm text-zinc-100 font-medium">{result.name}</div>
-                    <div className="text-xs text-zinc-500 truncate">{result.description}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-          {query.length >= 2 && results.length === 0 && (
-            <div className="px-4 py-8 text-center text-zinc-500 text-sm">
-              No results for "{query}"
-            </div>
-          )}
-          <div className="border-t border-zinc-800 px-4 py-2 flex justify-between text-xs text-zinc-600">
-            <span>ESC to close</span>
-            <span>↑↓ to navigate · Enter to select</span>
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={e => { setQuery(e.target.value); setSelectedIndex(0); }}
+          placeholder="Search docs, functions, classes..."
+          className="w-full px-4 py-3 bg-transparent text-zinc-100 placeholder-zinc-500 outline-none text-sm"
+        />
+        {results.length > 0 && (
+          <div className="border-t border-zinc-800 max-h-96 overflow-y-auto">
+            {results.map((result, i) => (
+              <button
+                key={`${result.type}-${result.name}`}
+                onClick={() => handleSelect(result)}
+                onMouseEnter={() => setSelectedIndex(i)}
+                className={`w-full px-4 py-2.5 text-left flex items-center gap-3 ${
+                  i === selectedIndex ? "bg-zinc-800" : "hover:bg-zinc-800/50"
+                }`}
+              >
+                <span className={`text-xs px-2 py-0.5 rounded shrink-0 ${
+                  result.type === "function" ? "bg-green-900/50 text-green-400" :
+                  result.type === "class" ? "bg-blue-900/50 text-blue-400" :
+                  "bg-zinc-700 text-zinc-400"
+                }`}>
+                  {result.type}
+                </span>
+                <div className="min-w-0">
+                  <div className="text-sm text-zinc-100 font-medium">{result.name}</div>
+                  <div className="text-xs text-zinc-500 truncate">{result.description}</div>
+                </div>
+              </button>
+            ))}
           </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+        )}
+        {query.length >= 2 && results.length === 0 && (
+          <div className="px-4 py-8 text-center text-zinc-500 text-sm">
+            No results for "{query}"
+          </div>
+        )}
+        <div className="border-t border-zinc-800 px-4 py-2 flex justify-between text-xs text-zinc-600">
+          <span>ESC to close</span>
+          <span>↑↓ to navigate · Enter to select</span>
+        </div>
+      </div>
+    </div>
   );
 }

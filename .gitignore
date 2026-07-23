@@ -1,76 +1,36 @@
-benchmarks/
+```
+# Dependencies
+node_modules/
 
-__pycache__/
-*.py[cod]
-*$py.class
-*.pyc 
-*.so
-
-.Python
-build/
+# Build artifacts
 dist/
-downloads/
-eggs/
-.eggs/
-*.egg-info/
-*.egg
-pip-wheel-metadata/
+build/
+target/
 
-pip-log.txt
-pip-delete-this-directory.txt
-
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-pytest_cache/
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-
-.mypy_cache/
-.pyre/
-.pytype/
-ruff_cache/
-
-.venv/
-venv/
-env/
-ENV/
-
-.ipynb_checkpoints/
-
-.vscode/
-.idea/
-
-.DS_Store
-Thumbs.db
-
-*.log
-
+# Environment
 .env
+.env.local
 .env.*
 
-*.manifest
-*.spec
+# Logs
+*.log
 
-docs/_build/
-
-site/
-
-*.tmp
+# Editor/IDE
+.vscode/
+.idea/
 *.swp
+*.swo
+*.tmp
 
-poetry.lock
-.pdm.toml
-.hatch/
-.uv/
-coverage/
-.pypirc
-
-*.local.txt
-
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+.env
+.env.local
+.env.*
+```

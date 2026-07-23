@@ -1,24 +1,4 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
-const capabilities = [
-  {
-    title: "Load editor maps",
-    text: "Parse tilemap-editor JSON files and keep access to layers, tilesets, object data, and raw map metadata.",
-  },
-  {
-    title: "Render what matters",
-    text: "Use TileLayerRenderer with camera coordinates and viewport culling instead of hand-slicing tile surfaces every frame.",
-  },
-  {
-    title: "Ship collision data",
-    text: "Pair tile maps with collision shapes for top-down or platformer movement. Also detect object-to-object collisions between dynamic entities with mixed shapes and layer filtering.",
-  },
-  {
-    title: "Play sprite animations",
-    text: "Load animation JSON, switch clips, and retrieve pygame surfaces from a compact AnimationPlayer API.",
-  },
-];
 
 const parseTargets = [
   {
@@ -35,22 +15,11 @@ const parseTargets = [
   },
 ];
 
-const docsFlow = [
-  { label: "Install", to: "/installation" },
-  { label: "Load a map", to: "/quickstart" },
-  { label: "Run the demo", to: "/examples/full-game" },
-  { label: "Check the API", to: "/api" },
-];
-
 export function Home() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="max-w-6xl space-y-14"
-    >
+    <div className="space-y-12">
       <section>
-        <p className="mb-3 text-sm font-medium uppercase tracking-[0.18em] text-cyan-300">
+        <p className="mb-3 text-sm font-medium uppercase tracking-wide text-blue-600">
           Python tools for tile-based games
         </p>
         <h1 className="max-w-4xl text-4xl font-semibold text-zinc-50 md:text-5xl">
@@ -64,9 +33,9 @@ export function Home() {
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             to="/quickstart"
-            className="rounded-lg bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-lg shadow-cyan-500/10 hover:bg-cyan-400"
+            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
           >
-            Start building
+            Quick Start
           </Link>
           <Link
             to="/examples/full-game"
@@ -77,31 +46,10 @@ export function Home() {
         </div>
       </section>
 
-      <section>
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-semibold text-zinc-100">
-              What the package covers
-            </h2>
-            <p className="mt-2 text-zinc-400">
-              The docs are organized around the systems you wire together in an actual game loop.
-            </p>
-          </div>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          {capabilities.map((item) => (
-            <div key={item.title} className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-5">
-              <h3 className="text-base font-semibold text-zinc-100">{item.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-400">{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section className="rounded-lg border border-zinc-800 bg-zinc-950 p-6">
         <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
-            <p className="mb-3 text-sm font-medium uppercase tracking-[0.18em] text-cyan-300">
+            <p className="mb-3 text-sm font-medium uppercase tracking-wide text-blue-600">
               Parser target
             </p>
             <h2 className="text-2xl font-semibold text-zinc-100">
@@ -118,7 +66,7 @@ export function Home() {
                 href="https://pypi.org/project/tilemap-editor/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-cyan-700/60 hover:bg-zinc-900"
+                className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-blue-700 hover:bg-zinc-900"
               >
                 tilemap-editor on PyPI
               </a>
@@ -126,7 +74,7 @@ export function Home() {
                 href="https://github.com/FluffyBrudy/tilemap-editor"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-cyan-700/60 hover:bg-zinc-900"
+                className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-blue-700 hover:bg-zinc-900"
               >
                 tilemap-editor on GitHub
               </a>
@@ -143,25 +91,55 @@ export function Home() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-zinc-800 bg-zinc-950 p-6">
-        <h2 className="text-xl font-semibold text-zinc-100">Recommended path</h2>
-        <div className="mt-5 grid gap-3 md:grid-cols-4">
-          {docsFlow.map((step, index) => (
-            <Link
-              key={step.to}
-              to={step.to}
-              className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-cyan-700/60 hover:bg-zinc-800"
-            >
-              <span className="text-xs font-medium text-cyan-300">
-                Step {index + 1}
-              </span>
-              <span className="mt-2 block text-sm font-semibold text-zinc-100">
-                {step.label}
-              </span>
-            </Link>
-          ))}
+      <section>
+        <h2 className="text-xl font-semibold text-zinc-100">Documentation</h2>
+        <div className="mt-5 grid gap-3 md:grid-cols-2">
+          <Link
+            to="/installation"
+            className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-blue-700 hover:bg-zinc-800"
+          >
+            <span className="text-xs font-medium text-blue-600">
+              Step 1
+            </span>
+            <span className="mt-2 block text-sm font-semibold text-zinc-100">
+              Installation
+            </span>
+          </Link>
+          <Link
+            to="/quickstart"
+            className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-blue-700 hover:bg-zinc-800"
+          >
+            <span className="text-xs font-medium text-blue-600">
+              Step 2
+            </span>
+            <span className="mt-2 block text-sm font-semibold text-zinc-100">
+              Quick Start
+            </span>
+          </Link>
+          <Link
+            to="/examples/full-game"
+            className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-blue-700 hover:bg-zinc-800"
+          >
+            <span className="text-xs font-medium text-blue-600">
+              Step 3
+            </span>
+            <span className="mt-2 block text-sm font-semibold text-zinc-100">
+              Examples
+            </span>
+          </Link>
+          <Link
+            to="/api"
+            className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-blue-700 hover:bg-zinc-800"
+          >
+            <span className="text-xs font-medium text-blue-600">
+              Step 4
+            </span>
+            <span className="mt-2 block text-sm font-semibold text-zinc-100">
+              API Reference
+            </span>
+          </Link>
         </div>
       </section>
-    </motion.div>
+    </div>
   );
 }
