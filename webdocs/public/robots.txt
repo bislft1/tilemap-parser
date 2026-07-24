@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tilemap-parser.vercel.app/sitemap.xml
+Sitemap: https://tilemap-parser.pyrobros.com/sitemap.xml

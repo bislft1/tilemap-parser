@@ -1,76 +1,37 @@
-benchmarks/
-
-__pycache__/
-*.py[cod]
-*$py.class
-*.pyc 
-*.so
-
-.Python
-build/
+```
+# TypeScript/JavaScript build artifacts
+tsconfig.tsbuildinfo
 dist/
-downloads/
-eggs/
-.eggs/
-*.egg-info/
-*.egg
-pip-wheel-metadata/
+build/
+node_modules/
 
-pip-log.txt
-pip-delete-this-directory.txt
-
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-pytest_cache/
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-
-.mypy_cache/
-.pyre/
-.pytype/
-ruff_cache/
-
-.venv/
-venv/
-env/
-ENV/
-
-.ipynb_checkpoints/
-
+# IDE files
 .vscode/
 .idea/
+*.swp
+*.swo
 
+# Environment files
+.env
+.env.local
+*.env.*
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Dependency cache
+.npm/
+.yarn/
+.pnp.*
+.pnp.js
+
+# Coverage reports
+coverage/
+htmlcov/
+*.coverage
+
+# OS generated files
 .DS_Store
 Thumbs.db
-
-*.log
-
-.env
-.env.*
-
-*.manifest
-*.spec
-
-docs/_build/
-
-site/
-
-*.tmp
-*.swp
-
-poetry.lock
-.pdm.toml
-.hatch/
-.uv/
-coverage/
-.pypirc
-
-*.local.txt
-
+```
