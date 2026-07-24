@@ -1,121 +1,120 @@
-import { CodeBlock } from "../components/CodeBlock";
+import Seo from '../components/Seo'
+import CodeBlock from '../components/CodeBlock'
 
-export function QuickStart() {
+export default function QuickStart() {
   return (
-    <div id="main-content" className="space-y-12">
-      <section>
-        <h1 className="text-4xl font-semibold text-zinc-100 mb-4">
-          Quick Start
-        </h1>
-        <p className="text-lg text-zinc-400 max-w-3xl">
-          Load your first tilemap and render it in under 5 minutes.
-        </p>
-      </section>
+    <>
+      <Seo 
+        title="Quick Start" 
+        description="Minimal working example loading a map and rendering tiles with Pygame"
+        path="/quickstart"
+      />
+      
+      <h1 style={{ fontSize: 32, fontWeight: 600, marginBottom: 24 }}>Quick Start</h1>
+      
+      <p style={{ fontSize: 16, color: '#a1a1aa', marginBottom: 32 }}>
+        A minimal working example that loads a map and renders tiles to the screen.
+      </p>
 
-      <section>
-        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
-          Prerequisites
-        </h2>
-        <p className="text-zinc-400 mb-4">
-          Before starting, ensure you have:
-        </p>
-        <ul className="space-y-2 text-zinc-400">
-          <li>• Python 3.10+ installed</li>
-          <li>• pygame-ce installed (<code className="text-zinc-200">pip install pygame-ce</code>)</li>
-          <li>• A tilemap-editor export (map.json) with associated tileset images</li>
-        </ul>
-      </section>
+      <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Complete example</h2>
+      
+      <CodeBlock code={`from tilemap_parser import load_map, TileLayerRenderer
+import pygame
 
-      <section>
-        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
-          Load a Map
-        </h2>
-        <p className="text-zinc-400 mb-4">
-          Use <code className="text-zinc-200">load_map()</code> to parse your map JSON and load all tileset images:
-        </p>
-        <CodeBlock
-          code={`from tilemap_parser import load_map
-
-data = load_map("path/to/map.json", extra_search_base="assets/")`}
-          language="python"
-        />
-        <p className="text-zinc-400 mt-4">
-          The <code className="text-zinc-200">extra_search_base</code> parameter tells the loader where to find tileset images relative to the map file.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
-          Create a Renderer
-        </h2>
-        <p className="text-zinc-400 mb-4">
-          Initialize a <code className="text-zinc-200">TileLayerRenderer</code> with your loaded map data:
-        </p>
-        <CodeBlock
-          code={`from tilemap_parser import TileLayerRenderer
-
-renderer = TileLayerRenderer(data)
-renderer.warm_cache()  # Pre-load tiles for smoother rendering`}
-          language="python"
-        />
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
-          Render Loop
-        </h2>
-        <p className="text-zinc-400 mb-4">
-          In your game loop, render visible tiles each frame:
-        </p>
-        <CodeBlock
-          code={`import pygame
-from tilemap_parser import Camera
-
-# Setup
+pygame.init()
 screen = pygame.display.set_mode((800, 600))
-camera = Camera(viewport_width=800, viewport_height=600)
+clock = pygame.time.Clock()
 
-# Game loop
+# Load the map
+data = load_map("path/to/map.json")
+
+# Create and warm up the renderer
+renderer = TileLayerRenderer(data)
+renderer.warm_cache()
+
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
     
-    # Update camera to follow player
-    camera.follow(player)
-    camera.update(dt)
-    
-    # Render
     screen.fill((0, 0, 0))
-    renderer.render(screen, camera.offset)
-    pygame.display.flip()`}
-          language="python"
-        />
-      </section>
+    
+    # Render all visible tiles
+    stats = renderer.render(screen, camera_offset=(0, 0))
+    
+    pygame.display.flip()
+    clock.tick(60)
 
-      <section>
-        <h2 className="text-2xl font-semibold text-zinc-100 mb-6">
-          Next Steps
-        </h2>
-        <ul className="space-y-2 text-zinc-400">
-          <li>
-            <a href="/collision" className="text-blue-600 hover:text-blue-500">
-              Collision Guide
-            </a> — Add tile-based collision detection and response
-          </li>
-          <li>
-            <a href="/examples/full-game" className="text-blue-600 hover:text-blue-500">
-              Full Demo
-            </a> — See a complete working example with all features
-          </li>
-          <li>
-            <a href="/api" className="text-blue-600 hover:text-blue-500">
-              API Reference
-            </a> — Explore all available classes and methods
-          </li>
-        </ul>
-      </section>
-    </div>
-  );
+pygame.quit()`} />
+
+      <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Step by step</h2>
+      
+      <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 32, marginBottom: 12 }}>1. Load the map</h3>
+      
+      <p style={{ marginBottom: 16, color: '#d4d4d8' }}>
+        Use <code>load_map()</code> to parse the map file and load all tileset images:
+      </p>
+      
+      <CodeBlock code={`from tilemap_parser import load_map
+
+data = load_map("path/to/map.json")`} />
+      
+      <p style={{ marginBottom: 16, color: '#d4d4d8' }}>
+        This returns a <code>TilemapData</code> instance containing parsed data, loaded surfaces, and resolved paths.
+      </p>
+
+      <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 32, marginBottom: 12 }}>2. Create the renderer</h3>
+      
+      <p style={{ marginBottom: 16, color: '#d4d4d8' }}>
+        Create a <code>TileLayerRenderer</code> and call <code>warm_cache()</code> to pre-render tile variants:
+      </p>
+      
+      <CodeBlock code={`from tilemap_parser import TileLayerRenderer
+
+renderer = TileLayerRenderer(data)
+renderer.warm_cache()  # Pre-renders all tile variants`} />
+
+      <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 32, marginBottom: 12 }}>3. Render in the game loop</h3>
+      
+      <p style={{ marginBottom: 16, color: '#d4d4d8' }}>
+        Call <code>render()</code> each frame with the camera offset:
+      </p>
+      
+      <CodeBlock code={`stats = renderer.render(screen, camera_offset=(0, 0))
+
+# stats contains:
+# - drawn_tiles: number of tiles rendered this frame
+# - skipped_tiles: tiles outside viewport or missing surfaces
+# - visible_layers: number of layers that had visible tiles`} />
+
+      <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Adding a camera</h2>
+      
+      <p style={{ marginBottom: 16, color: '#d4d4d8' }}>
+        For proper scrolling, use the <code>Camera</code> class:
+      </p>
+      
+      <CodeBlock code={`from tilemap_parser import Camera
+
+camera = Camera(viewport_width=800, viewport_height=600)
+camera.follow(player)
+camera.update(dt)
+
+# In render call:
+renderer.render(screen, camera.offset)`} />
+
+      <div style={{ 
+        background: '#27272a', 
+        borderLeft: '3px solid #2563eb',
+        padding: '16px 20px',
+        margin: '32px 0',
+        borderRadius: '0 6px 6px 0'
+      }}>
+        <p style={{ fontSize: 14, color: '#a1a1aa', margin: 0 }}>
+          <strong>Next:</strong> Learn about <a href="#/map-loading" style={{ color: '#2563eb' }}>Map Loading</a> in detail, 
+          or see <a href="#/tile-rendering" style={{ color: '#2563eb' }}>Tile Rendering</a> for y-sort and animated tiles.
+        </p>
+      </div>
+    </>
+  )
 }

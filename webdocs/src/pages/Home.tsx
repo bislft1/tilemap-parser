@@ -1,145 +1,108 @@
-import { Link } from "react-router-dom";
+import Seo from '../components/Seo'
+import CodeBlock from '../components/CodeBlock'
 
-const parseTargets = [
-  {
-    title: "Map JSON",
-    text: "Layers, z-index ordering, tile positions, tile variants, tileset references, object layers, custom properties, and raw map metadata from tilemap-editor saves.",
-  },
-  {
-    title: "Sprite animation JSON",
-    text: "Animation libraries exported by the tilemap-editor animation tool, including clip names, frame timing, playback state, and spritesheet-backed pygame surfaces.",
-  },
-  {
-    title: "Collision JSON",
-    text: "Tileset and character collision data used by CollisionCache and CollisionRunner for rectangles, circles, capsules, polygons, slopes, and movement response.",
-  },
-];
-
-export function Home() {
+export default function Home() {
   return (
-    <div className="space-y-12">
-      <section>
-        <p className="mb-3 text-sm font-medium uppercase tracking-wide text-blue-600">
-          Python tools for tile-based games
-        </p>
-        <h1 className="max-w-4xl text-4xl font-semibold text-zinc-50 md:text-5xl">
-          Load tilemap-editor exports in your pygame project.
-        </h1>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-zinc-400">
-          tilemap-parser reads map, animation, and collision JSON produced by
-          tilemap-editor, then gives you runtime helpers for layers, surfaces,
-          rendering, animation playback, and collision movement.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            to="/quickstart"
-            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
-          >
-            Quick Start
-          </Link>
-          <Link
-            to="/examples/full-game"
-            className="rounded-lg border border-zinc-700 bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-zinc-100 hover:border-zinc-600 hover:bg-zinc-800"
-          >
-            View full demo
-          </Link>
-        </div>
-      </section>
+    <>
+      <Seo 
+        title="Introduction" 
+        description="tilemap-parser is a Python library for parsing Tiled maps and rendering tilemaps with Pygame"
+        path="/"
+      />
+      
+      <h1 style={{ fontSize: 32, fontWeight: 600, marginBottom: 24 }}>tilemap-parser</h1>
+      
+      <p style={{ fontSize: 16, color: '#a1a1aa', marginBottom: 32 }}>
+        A Python library for parsing Tiled maps and rendering tilemaps with Pygame. 
+        Provides typed dataclasses, runtime rendering, collision systems, animation, particles, and more.
+      </p>
 
-      <section className="rounded-lg border border-zinc-800 bg-zinc-950 p-6">
-        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-          <div>
-            <p className="mb-3 text-sm font-medium uppercase tracking-wide text-blue-600">
-              Parser target
-            </p>
-            <h2 className="text-2xl font-semibold text-zinc-100">
-              Built for tilemap-editor output
-            </h2>
-            <p className="mt-3 text-sm leading-6 text-zinc-400">
-              tilemap-parser is the runtime-side package for projects built
-              with tilemap-editor. The editor is the pygame tool for creating
-              maps and sprite animations; this package loads those exported
-              JSON files in your game code.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <a
-                href="https://pypi.org/project/tilemap-editor/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-blue-700 hover:bg-zinc-900"
-              >
-                tilemap-editor on PyPI
-              </a>
-              <a
-                href="https://github.com/FluffyBrudy/tilemap-editor"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-blue-700 hover:bg-zinc-900"
-              >
-                tilemap-editor on GitHub
-              </a>
-            </div>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-1">
-            {parseTargets.map((item) => (
-              <div key={item.title} className="rounded-lg border border-zinc-800 bg-zinc-900/60 p-4">
-                <h3 className="text-sm font-semibold text-zinc-100">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-zinc-400">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>What it does</h2>
+      
+      <ul style={{ marginBottom: 32, paddingLeft: 20, color: '#d4d4d8' }}>
+        <li style={{ marginBottom: 8 }}><strong>Parse</strong> Tiled JSON/TMX files into typed dataclasses</li>
+        <li style={{ marginBottom: 8 }}><strong>Load</strong> tileset images and resolve paths automatically</li>
+        <li style={{ marginBottom: 8 }}><strong>Render</strong> tiles with y-sort support and animated tiles</li>
+        <li style={{ marginBottom: 8 }}><strong>Handle collision</strong> with tile-based and object-vs-object systems</li>
+        <li style={{ marginBottom: 8 }}><strong>Support cameras</strong> with follow, bounds, shake, and deadzone modes</li>
+        <li style={{ marginBottom: 8 }}><strong>Play animations</strong> via state machine pattern</li>
+        <li style={{ marginBottom: 8 }}><strong>Render particles</strong> from map-defined emitters or manual configs</li>
+      </ul>
 
-      <section>
-        <h2 className="text-xl font-semibold text-zinc-100">Documentation</h2>
-        <div className="mt-5 grid gap-3 md:grid-cols-2">
-          <Link
-            to="/installation"
-            className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-blue-700 hover:bg-zinc-800"
-          >
-            <span className="text-xs font-medium text-blue-600">
-              Step 1
-            </span>
-            <span className="mt-2 block text-sm font-semibold text-zinc-100">
-              Installation
-            </span>
-          </Link>
-          <Link
-            to="/quickstart"
-            className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-blue-700 hover:bg-zinc-800"
-          >
-            <span className="text-xs font-medium text-blue-600">
-              Step 2
-            </span>
-            <span className="mt-2 block text-sm font-semibold text-zinc-100">
-              Quick Start
-            </span>
-          </Link>
-          <Link
-            to="/examples/full-game"
-            className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-blue-700 hover:bg-zinc-800"
-          >
-            <span className="text-xs font-medium text-blue-600">
-              Step 3
-            </span>
-            <span className="mt-2 block text-sm font-semibold text-zinc-100">
-              Examples
-            </span>
-          </Link>
-          <Link
-            to="/api"
-            className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-4 hover:border-blue-700 hover:bg-zinc-800"
-          >
-            <span className="text-xs font-medium text-blue-600">
-              Step 4
-            </span>
-            <span className="mt-2 block text-sm font-semibold text-zinc-100">
-              API Reference
-            </span>
-          </Link>
-        </div>
-      </section>
-    </div>
-  );
+      <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Minimal example</h2>
+      
+      <CodeBlock code={`from tilemap_parser import load_map, TileLayerRenderer
+import pygame
+
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+
+# Load map
+data = load_map("path/to/map.json")
+
+# Create renderer
+renderer = TileLayerRenderer(data)
+renderer.warm_cache()
+
+clock = pygame.time.Clock()
+running = True
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    screen.fill((0, 0, 0))
+    
+    # Render tiles
+    renderer.render(screen, camera_offset=(0, 0))
+    
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()`} />
+
+      <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Architecture</h2>
+      
+      <p style={{ marginBottom: 16, color: '#d4d4d8' }}>
+        The library is organized into three main modules:
+      </p>
+      
+      <ul style={{ marginBottom: 32, paddingLeft: 20, color: '#d4d4d8' }}>
+        <li style={{ marginBottom: 8 }}><code style={{ color: '#2563eb' }}>parser/</code> — Parsing JSON/TMX into typed dataclasses</li>
+        <li style={{ marginBottom: 8 }}><code style={{ color: '#2563eb' }}>runtime/</code> — Runtime classes for rendering, collision, camera, animation (advanced use)</li>
+        <li style={{ marginBottom: 8 }}><code style={{ color: '#2563eb' }}>utils/</code> — Pure collision math functions (advanced use)</li>
+      </ul>
+
+      <div style={{ 
+        background: '#27272a', 
+        borderLeft: '3px solid #2563eb',
+        padding: '16px 20px',
+        margin: '32px 0',
+        borderRadius: '0 6px 6px 0'
+      }}>
+        <p style={{ fontSize: 14, color: '#a1a1aa', margin: 0 }}>
+          <strong>Note:</strong> The <code>runtime/</code> and <code>utils/</code> modules are for advanced use cases. 
+          Most users only need <code>load_map()</code>, <code>TileLayerRenderer</code>, and <code>CollisionRunner</code>.
+        </p>
+      </div>
+
+      <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Data flow</h2>
+      
+      <CodeBlock code={`map.json → parse_map_file() → ParsedMap (typed dataclasses)
+                            ↓
+                 TilemapData.load() loads images, resolves paths
+                            ↓
+                 TileLayerRenderer (renders tiles)
+                 load_map_objects() (loads objects)
+                 CollisionRunner (movement & collision)`} language="text" />
+
+      <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Next steps</h2>
+      
+      <p style={{ color: '#d4d4d8' }}>
+        Continue to <a href="#/installation" style={{ color: '#2563eb' }}>Installation</a> to get started, 
+        or jump to <a href="#/quickstart" style={{ color: '#2563eb' }}>Quick Start</a> for a minimal working example.
+      </p>
+    </>
+  )
 }

@@ -1,23 +1,25 @@
 interface CodeBlockProps {
-  code: string;
-  language?: string;
-  title?: string;
+  code: string
 }
 
-export function CodeBlock({
-  code,
-  title,
-}: CodeBlockProps) {
+export default function CodeBlock({ code }: CodeBlockProps) {
   return (
-    <div className="relative rounded-lg overflow-hidden bg-[#18181b] border border-zinc-800">
-      {title && (
-        <div className="flex items-center px-4 py-2 bg-zinc-900/50 border-b border-zinc-800">
-          <span className="text-xs text-zinc-500 font-medium">{title}</span>
-        </div>
-      )}
-      <pre className="p-4 overflow-x-auto text-sm leading-relaxed">
-        <code className="font-mono text-zinc-300">{code}</code>
-      </pre>
-    </div>
-  );
+    <pre style={{
+      background: '#18181b',
+      padding: '1rem',
+      borderRadius: 6,
+      overflowX: 'auto',
+      margin: '1rem 0',
+      border: '1px solid #27272a',
+    }}>
+      <code style={{
+        fontFamily: "'JetBrains Mono', monospace",
+        fontSize: 13,
+        lineHeight: 1.6,
+        color: '#e4e4e7',
+      }}>
+        {code.trim()}
+      </code>
+    </pre>
+  )
 }
