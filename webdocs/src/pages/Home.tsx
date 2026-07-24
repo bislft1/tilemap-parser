@@ -55,7 +55,7 @@ while running:
     screen.fill((0, 0, 0))
     
     # Render tiles
-    renderer.render(screen, camera_offset=(0, 0))
+    renderer.render(screen, (0, 0))
     
     pygame.display.flip()
     clock.tick(60)
@@ -95,14 +95,16 @@ pygame.quit()`} />
                             ↓
                  TileLayerRenderer (renders tiles)
                  load_map_objects() (loads objects)
-                 CollisionRunner (movement & collision)`} language="text" />
+                 CollisionRunner (movement & collision)`} />
 
       <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Next steps</h2>
       
-      <p style={{ color: '#d4d4d8' }}>
-        Continue to <a href="#/installation" style={{ color: '#2563eb' }}>Installation</a> to get started, 
-        or jump to <a href="#/quickstart" style={{ color: '#2563eb' }}>Quick Start</a> for a minimal working example.
-      </p>
+      <ul style={{ paddingLeft: 20, color: '#d4d4d8' }}>
+        <li style={{ marginBottom: 8 }}><a href="#/installation" style={{ color: '#2563eb' }}>Installation</a> — Install via pip</li>
+        <li style={{ marginBottom: 8 }}><a href="#/quickstart" style={{ color: '#2563eb' }}>Quick Start</a> — Minimal working example</li>
+        <li style={{ marginBottom: 8 }}><a href="#/map-loading" style={{ color: '#2563eb' }}>Map Loading</a> — Parse maps and load tilesets</li>
+        <li style={{ marginBottom: 8 }}><a href="#/tile-rendering" style={{ color: '#2563eb' }}>Tile Rendering</a> — Render with y-sort and animations</li>
+      </ul>
     </>
   )
 }

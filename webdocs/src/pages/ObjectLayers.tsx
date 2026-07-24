@@ -82,7 +82,7 @@ objects = load_map_objects(data, "path/to/collision/")`} />
         In game code, objects are typically y-sorted against the player:
       </p>
       
-      <CodeBlock code={`sort_y = obj.y + (obj.y_sort_origin if obj.y_sort_origin is not None else obj.surface.get_height())`} language="python" />
+      <CodeBlock code={`sort_y = obj.y + (obj.y_sort_origin if obj.y_sort_origin is not None else obj.surface.get_height())`} />
 
       <ul style={{ marginBottom: 32, paddingLeft: 20, color: '#d4d4d8' }}>
         <li style={{ marginBottom: 8 }}><strong>Default</strong> (<code>y_sort_origin = None</code>): sort by bottom of sprite</li>

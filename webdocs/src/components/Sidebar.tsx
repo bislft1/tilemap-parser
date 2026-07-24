@@ -70,6 +70,60 @@ export default function Sidebar({ currentPath, onNavigate }: SidebarProps) {
           </div>
         ))}
       </div>
+      
+      <div style={{ padding: '0 12px', marginTop: 32 }}>
+        <div style={{ 
+          fontSize: 12, 
+          fontWeight: 600, 
+          color: '#71717a', 
+          textTransform: 'uppercase',
+          letterSpacing: 0.05,
+          padding: '0 8px',
+          marginBottom: 8
+        }}>
+          External
+        </div>
+        <ul style={{ listStyle: 'none' }}>
+          <li>
+            <a
+              href="https://pypi.org/project/tilemap-parser/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="PyPI (opens in new tab)"
+              style={{
+                display: 'block',
+                padding: '6px 8px',
+                borderRadius: 4,
+                color: '#a1a1aa',
+                textDecoration: 'none',
+                fontSize: 14,
+                marginBottom: 2,
+              }}
+            >
+              PyPI
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/pyrobros/tilemap-parser"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub (opens in new tab)"
+              style={{
+                display: 'block',
+                padding: '6px 8px',
+                borderRadius: 4,
+                color: '#a1a1aa',
+                textDecoration: 'none',
+                fontSize: 14,
+                marginBottom: 2,
+              }}
+            >
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </div>
     </nav>
   )
 }

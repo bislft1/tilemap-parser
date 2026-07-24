@@ -51,7 +51,7 @@ export default function YSortGuide() {
   "type": "tile",
   "y_sort": true,
   "y_sort_origin": 16
-}`} language="json" />
+}`} />
 
       <p style={{ marginBottom: 16, color: '#d4d4d8' }}>
         When <code>y_sort=True</code>, each chunk's tiles are rendered in ascending Y order 

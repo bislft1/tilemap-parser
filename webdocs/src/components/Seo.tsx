@@ -6,7 +6,8 @@ interface SeoProps {
 
 export default function Seo({ title, description, path }: SeoProps) {
   const fullTitle = `${title} | tilemap-parser Docs`
-  const url = `https://tilemap-parser.pyrobros.com${path}`
+  const hashPath = path === '/' ? '' : path
+  const url = `https://tilemap-parser.pyrobros.com#${hashPath}`
   
   const structuredData = {
     "@context": "https://schema.org",

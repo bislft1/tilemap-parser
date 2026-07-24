@@ -37,7 +37,7 @@ stats = renderer.render(screen, camera.offset)`} />
     *,
     extra_objects: Sequence | None = None,
     current_time_ms: float | None = None,
-) -> LayerRenderStats`} language="python" />
+) -> LayerRenderStats`} />
 
       <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 48, marginBottom: 16 }}>Y-Sort</h2>
       
@@ -45,7 +45,7 @@ stats = renderer.render(screen, camera.offset)`} />
         When a layer has <code>y_sort=True</code>, tiles within each chunk are sorted by their pixel Y coordinate:
       </p>
       
-      <CodeBlock code={`sorted(chunk, key=lambda p: p[1] * eff_h + y_sort_origin)`} language="python" />
+      <CodeBlock code={`sorted(chunk, key=lambda p: p[1] * eff_h + y_sort_origin)`} />
 
       <ul style={{ marginBottom: 32, paddingLeft: 20, color: '#d4d4d8' }}>
         <li style={{ marginBottom: 8 }}>Tile Y = <code>grid_row * tile_height</code></li>

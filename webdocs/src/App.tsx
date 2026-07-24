@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import type { ComponentType } from 'react'
 import Sidebar from './components/Sidebar'
 import SearchModal from './components/SearchModal'
 import Home from './pages/Home'
@@ -17,7 +18,7 @@ import TmxImport from './pages/TmxImport'
 import CommonPitfalls from './pages/CommonPitfalls'
 import ApiReference from './pages/ApiReference'
 
-const PAGES: Record<string, React.ComponentType<any>> = {
+const PAGES: Record<string, ComponentType<any>> = {
   '/': Home,
   '/installation': Installation,
   '/quickstart': QuickStart,
@@ -56,6 +57,18 @@ export default function App() {
     if (PAGES[hash]) {
       setCurrentPath(hash)
     }
+    
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1) || '/'
+      if (PAGES[hash]) {
+        setCurrentPath(hash)
+      }
+    }
+    
+    window.addEventListener('hashchange', handleHashChange)
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
   }, [])
 
   const CurrentPage = PAGES[currentPath] || Home
@@ -74,11 +87,14 @@ export default function App() {
           }} 
         />
         
-        <main style={{
-          flex: 1,
-          maxWidth: 896,
-          padding: '48px 64px',
-        }}>
+        <main 
+          id="main-content"
+          style={{
+            flex: 1,
+            maxWidth: 896,
+            padding: '48px 64px',
+          }}
+        >
           <button
             onClick={() => setIsSearchOpen(true)}
             style={{
